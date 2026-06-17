@@ -10,9 +10,8 @@ venue: 'Quarterly Journal of Economics'
 status: published
 tier: 2
 featured: true
-draft: true
 summary: 'We built and ran the world’s first market for particulate air pollution — a cap-and-trade scheme among industrial plants in Surat — as a randomized controlled trial, and found it cut emissions while lowering firms’ costs.'
-abstract: 'Pollution markets are widely used in rich countries but almost untried where enforcement is weak and monitoring sparse. Working with the Gujarat Pollution Control Board, we designed and launched an emissions trading scheme for particulate matter among hundreds of industrial plants in Surat, and evaluated it with a randomized controlled trial. Plants in the market held emissions below the cap, achieved large reductions relative to control plants, and did so at lower abatement cost — evidence that market-based environmental regulation can work in a developing-country setting.'
+abstract: 'Pollution markets are widely used in rich countries but almost untried where enforcement is weak and monitoring sparse. Working with the Gujarat Pollution Control Board, we designed and launched an emissions trading scheme for particulate matter among hundreds of industrial plants in Surat, and evaluated it with a randomized controlled trial. Plants in the market held emissions below the cap, reduced pollution sharply relative to control plants, and did so at lower abatement cost — evidence that market-based environmental regulation can work in a developing-country setting.'
 topics:
   - Air pollution
   - Environmental regulation
@@ -20,52 +19,36 @@ topics:
 teaser: /papers/surat-emissions-market/teaser.svg
 teaserAlt: Industrial skyline over Surat
 links:
+  journal: https://academic.oup.com/qje/article-abstract/140/2/1003/8002857
+  ssrn: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5218850
   website: https://emissionsmarkets.org
-  journal: '#'
-  nber: '#'
 press:
-  - outlet: EPIC
-    title: 'Learnings from emissions trade in India'
-    url: https://epic.uchicago.edu/insights/learnings-from-emissions-trade-in-india-anant-sudarshan-michael-greenston/
-    date: '2024'
-  - outlet: '[verify]'
-    title: 'Placeholder — additional press to be imported from your site'
-    url: '#'
-awards:
-  - title: 'Placeholder award / recognition'
-    org: 'to be verified'
+  - outlet: EPIC / Institute for Climate and Sustainable Growth
+    title: 'Can Pollution Markets Work in Developing Countries? Experimental Evidence from India'
+    url: https://climate.uchicago.edu/insights/can-pollution-markets-work-in-developing-countries-experimental-evidence-from-india/
 followUps:
-  - title: 'Scaling particulate markets to other Indian cities'
+  - title: 'Continuous emissions monitoring and the Surat Emissions Trading Scheme'
     status: ongoing
-    blurb: 'Working with state pollution control boards to extend the Surat design.'
-  - title: 'Long-run health effects of sustained market operation'
-    status: planned
-    blurb: 'Linking emissions data to administrative health records.'
+    blurb: 'Ongoing work with state pollution control boards on the monitoring infrastructure that makes particulate markets enforceable.'
+    url: https://emissionsmarkets.org
 bibtex: |
   @article{greenstone2025pollution,
     title   = {Can Pollution Markets Work in Developing Countries? Experimental Evidence from India},
     author  = {Greenstone, Michael and Pande, Rohini and Ryan, Nicholas and Sudarshan, Anant},
     journal = {Quarterly Journal of Economics},
-    year    = {2025}
+    volume  = {140},
+    number  = {2},
+    pages   = {1003--1060},
+    year    = {2025},
+    doi     = {10.1093/qje/qjaf009}
   }
 ---
 
-import Figure from '@/components/Figure.astro';
 import Plot from '@/components/Plot.astro';
-import CompareSlider from '@/components/CompareSlider.astro';
-import Gallery from '@/components/Gallery.astro';
 
-export const pm = [
-  { x: 2019.0, y: 280, series: 'Control plants' },
-  { x: 2019.5, y: 272, series: 'Control plants' },
-  { x: 2020.0, y: 268, series: 'Control plants' },
-  { x: 2020.5, y: 275, series: 'Control plants' },
-  { x: 2021.0, y: 270, series: 'Control plants' },
-  { x: 2019.0, y: 278, series: 'Market plants' },
-  { x: 2019.5, y: 235, series: 'Market plants' },
-  { x: 2020.0, y: 198, series: 'Market plants' },
-  { x: 2020.5, y: 185, series: 'Market plants' },
-  { x: 2021.0, y: 176, series: 'Market plants' },
+export const compliance = [
+  { x: 'Market plants', y: 99 },
+  { x: 'Control plants', y: 66 },
 ];
 
 ## The story behind the paper
@@ -76,34 +59,16 @@ So we did not just study a market. **We built one**, together with the Gujarat P
 
 ### What we found
 
-Plants in the market kept their emissions below the cap, cut pollution sharply relative to control plants, and spent *less* on abatement than command-and-control would have required. The figure below traces measured particulate emissions for market versus control plants over the trial — drag along the line to read values.
+The market worked. Plants in the scheme complied with their emissions permits **99% of the time**, while control plants under conventional command-and-control regulation met their limits at most **66% of the time**. Market plants also cut pollution sharply relative to control plants — and spent *less* on abatement than the status quo would have required.
 
 <Plot
-  data={pm}
-  type="line"
-  xLabel="Year"
-  yLabel="PM emissions (illustrative units)"
-  caption="Illustrative data for layout — to be replaced with the paper's real series. Hover to inspect."
-/>
-
-The cleanest way to feel the result is to look at the air itself. Slide between the business-as-usual scenario and the market scenario:
-
-<CompareSlider
-  before="/papers/surat-emissions-market/before.svg"
-  after="/papers/surat-emissions-market/after.svg"
-  beforeLabel="Business as usual"
-  afterLabel="Under the market"
-  caption="Placeholder visuals — swap for real monitoring imagery or maps."
+  data={compliance}
+  type="bar"
+  xLabel=""
+  yLabel="Share of time within permitted emissions (%)"
+  caption="Permit compliance under the emissions market versus conventional regulation. Source: Greenstone, Pande, Ryan & Sudarshan, QJE (2025)."
 />
 
 ### Why it mattered
 
-A working pollution market in a low-enforcement setting is not just an academic result — it is a template other regulators can copy. The scheme has since informed conversations about extending emissions trading to other pollutants and other cities.
-
-<Gallery
-  images={[
-    { src: '/papers/surat-emissions-market/field-1.svg', caption: 'Plant visit during scheme rollout (placeholder).' },
-    { src: '/papers/surat-emissions-market/field-2.svg', caption: 'Continuous emissions monitoring device (placeholder).' },
-    { src: '/papers/surat-emissions-market/field-3.svg', caption: 'Field team in Surat (placeholder).' },
-  ]}
-/>
+A working pollution market in a low-enforcement setting is not just an academic result — it is a template other regulators can copy. The scheme has since informed conversations about extending emissions trading to other pollutants and other cities, and the continuous-monitoring infrastructure it relied on is now part of how India regulates industrial air pollution.

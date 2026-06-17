@@ -1,10 +1,102 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SITE } from '@/lib/site';
+
+const appointments = [
+  {
+    role: 'Associate Professor, Department of Economics',
+    org: 'University of Warwick',
+    note: 'present',
+  },
+  {
+    role: 'Senior Fellow, Energy Policy Institute (EPIC)',
+    org: 'University of Chicago',
+    note: 'present',
+  },
+  {
+    role: 'South Asia Director, Energy Policy Institute (EPIC)',
+    org: 'University of Chicago',
+    note: 'former',
+  },
+  {
+    role: 'Faculty, Harris School of Public Policy',
+    org: 'University of Chicago',
+    note: 'former',
+  },
+];
+
+const education = [
+  {
+    degree: 'PhD, Management Science & Engineering',
+    org: 'Stanford University',
+  },
+  { degree: 'MS, Mechanical Engineering', org: 'Stanford University' },
+  {
+    degree: 'B.Tech, Mechanical Engineering',
+    org: 'Indian Institute of Technology (IIT) Delhi',
+  },
+];
+
+// Selected, peer-reviewed publications. The full list lives on Google Scholar.
+const publications = [
+  {
+    title:
+      'Can Pollution Markets Work in Developing Countries? Experimental Evidence from India',
+    authors: 'with M. Greenstone, R. Pande & N. Ryan',
+    venue: 'Quarterly Journal of Economics',
+    year: 2025,
+    url: 'https://academic.oup.com/qje/article-abstract/140/2/1003/8002857',
+  },
+  {
+    title:
+      'The Social Costs of Keystone Species Collapse: Evidence from the Decline of Vultures in India',
+    authors: 'with E. Frank',
+    venue: 'American Economic Review',
+    year: 2024,
+    url: 'https://www.aeaweb.org/articles?id=10.1257/aer.20230016',
+  },
+  {
+    title: 'Rationing the Commons',
+    authors: 'with N. Ryan',
+    venue: 'Journal of Political Economy',
+    year: 2022,
+  },
+  {
+    title:
+      'Modeling Fine-Grained Spatio-Temporal Pollution Maps with Low-Cost Sensors',
+    authors: 'with S. R. Iyer, A. Balashankar et al.',
+    venue: 'npj Climate and Atmospheric Science',
+    year: 2022,
+  },
+  {
+    title:
+      'The Impact of Temperature on Productivity and Labor Supply: Evidence from Indian Manufacturing',
+    authors: 'with E. Somanathan, R. Somanathan & M. Tewari',
+    venue: 'Journal of Political Economy',
+    year: 2021,
+    url: 'https://www.journals.uchicago.edu/doi/abs/10.1086/713733',
+  },
+  {
+    title: 'The Consequences of Treating Electricity as a Right',
+    authors: 'with R. Burgess, M. Greenstone & N. Ryan',
+    venue: 'Journal of Economic Perspectives',
+    year: 2020,
+    url: 'https://www.aeaweb.org/articles?id=10.1257/jep.34.1.145',
+  },
+  {
+    title:
+      "Deconstructing the 'Rosenfeld Curve': Making Sense of California's Low Electricity Intensity",
+    authors: 'sole author',
+    venue: 'Energy Economics',
+    year: 2011,
+    url: 'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1715860',
+  },
+];
 ---
 
 <BaseLayout title="CV">
   <section class="mx-auto max-w-3xl px-5 pt-12 pb-4 sm:px-8">
-    <div class="flex items-baseline justify-between">
+    <div class="flex items-baseline justify-between gap-4">
       <h1 class="font-display text-4xl font-semibold tracking-tight">CV</h1>
       <a
         href="https://www.anantsudarshan.com/uploads/1/0/2/6/10267789/cv-6.pdf"
@@ -16,33 +108,87 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     </div>
 
     <p class="mt-4 text-[var(--color-muted)]">
-      A structured, web-native CV will live here — appointments, education,
-      publications, grants, talks and service — generated from the same data
-      that powers the research pages. For now, the PDF is the source of truth.
+      A summary of appointments, education and selected publications. The full
+      publication record is on
+      <a
+        href={SITE.links.scholar}
+        target="_blank"
+        rel="noopener"
+        class="text-[var(--color-accent)] hover:underline">Google Scholar</a
+      >, and the PDF above carries grants, talks and service.
     </p>
 
-    <!-- Placeholder structure to be filled from the imported CV. -->
-    <div class="mt-8 space-y-8">
+    <div class="mt-10 space-y-12">
       <div>
         <h2
           class="text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase"
         >
           Appointments
         </h2>
-        <p class="prose-editorial mt-2">
-          University of Warwick · EPIC, University of Chicago — to be populated
-          from your CV.
-        </p>
+        <ul class="mt-4 space-y-4">
+          {
+            appointments.map((a) => (
+              <li class="flex flex-wrap items-baseline justify-between gap-x-4">
+                <div>
+                  <span class="font-medium">{a.role}</span>
+                  <span class="text-[var(--color-muted)]"> · {a.org}</span>
+                </div>
+                <span class="text-xs text-[var(--color-muted)] uppercase tracking-wide">
+                  {a.note}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
       </div>
+
       <div>
         <h2
           class="text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase"
         >
           Education
         </h2>
-        <p class="prose-editorial mt-2">
-          PhD, Stanford University · IIT Delhi — to be populated from your CV.
-        </p>
+        <ul class="mt-4 space-y-4">
+          {
+            education.map((e) => (
+              <li>
+                <span class="font-medium">{e.degree}</span>
+                <span class="text-[var(--color-muted)]"> · {e.org}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2
+          class="text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase"
+        >
+          Selected publications
+        </h2>
+        <ol class="mt-4 space-y-5">
+          {
+            publications.map((p) => (
+              <li class="border-l-2 border-[var(--color-line)] pl-4">
+                {p.url ? (
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener"
+                    class="font-medium hover:text-[var(--color-accent)]"
+                  >
+                    {p.title}
+                  </a>
+                ) : (
+                  <span class="font-medium">{p.title}</span>
+                )}
+                <p class="mt-1 text-sm text-[var(--color-muted)]">
+                  {p.authors} · <span class="italic">{p.venue}</span>, {p.year}
+                </p>
+              </li>
+            ))
+          }
+        </ol>
       </div>
     </div>
   </section>

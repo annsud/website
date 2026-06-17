@@ -1,7 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Portrait placeholder">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" role="img" aria-label="Anant Sudarshan monogram">
   <rect width="400" height="500" fill="#f3e2da"/>
-  <circle cx="200" cy="200" r="92" fill="#b3431f" opacity="0.9"/>
-  <text x="200" y="232" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="96" font-weight="600" fill="#faf8f4">AS</text>
-  <text x="200" y="360" text-anchor="middle" font-family="Inter, sans-serif" font-size="18" fill="#6b6760">Portrait placeholder</text>
-  <text x="200" y="386" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" fill="#9b958c">replace with /public/portrait.jpg</text>
+  <circle cx="200" cy="250" r="108" fill="#b3431f" opacity="0.9"/>
+  <text x="200" y="288" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-size="108" font-weight="600" fill="#faf8f4">AS</text>
 </svg>

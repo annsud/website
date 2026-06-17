@@ -67,6 +67,7 @@ deployment → Source: GitHub Actions**.
   `'/'` in `astro.config.mjs`, add a `public/CNAME` file containing the domain,
   and point DNS at GitHub Pages.
 
-> Several pages and papers currently contain **draft placeholder content**
-> (marked with a banner) assembled from public sources, pending the import of
-> material from the existing site.
+> Page text and the publication list have been populated from public sources
+> (journal pages, EPIC / UChicago profiles, Google Scholar). Figures and
+> statistics on dossier pages cite their source. The CV PDF link and a handful
+> of secondary entries may still want a pass against Anant's own records.
