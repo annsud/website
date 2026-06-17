@@ -3,7 +3,7 @@ export const SITE = {
   name: 'Anant Sudarshan',
   title: 'Anant Sudarshan',
   role: 'Environmental & Energy Economist',
-  affiliation: 'University of Warwick · EPIC, University of Chicago',
+  affiliation: 'Department of Economics, University of Warwick',
   description:
     'Anant Sudarshan is an environmental and energy economist. His research spans air pollution, environmental regulation, climate change, energy efficiency, electricity and renewable energy — much of it field-based in India.',
   email: 'anant.sudarshan@gmail.com',

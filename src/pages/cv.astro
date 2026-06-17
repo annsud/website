@@ -1,27 +1,42 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { SITE } from '@/lib/site';
+import { SITE, url } from '@/lib/site';
 
 const appointments = [
   {
-    role: 'Associate Professor, Department of Economics',
+    role: 'Professor, Department of Economics',
     org: 'University of Warwick',
-    note: 'present',
+    when: '2025–present',
   },
   {
-    role: 'Senior Fellow, Energy Policy Institute (EPIC)',
-    org: 'University of Chicago',
-    note: 'present',
+    role: 'Associate Professor, Department of Economics',
+    org: 'University of Warwick',
+    when: '2023–2025',
+  },
+  {
+    role: 'Assistant Professor, Department of Economics',
+    org: 'University of Warwick',
+    when: '2022–2023',
   },
   {
     role: 'South Asia Director, Energy Policy Institute (EPIC)',
     org: 'University of Chicago',
-    note: 'former',
+    when: '2017–2022',
   },
   {
-    role: 'Faculty, Harris School of Public Policy',
+    role: 'India Director, Energy Policy Institute (EPIC)',
     org: 'University of Chicago',
-    note: 'former',
+    when: '2014–2017',
+  },
+  {
+    role: 'Sustainability Science Fellow, Kennedy School',
+    org: 'Harvard University',
+    when: '2011–2014',
+  },
+  {
+    role: 'Research Scientist, Energy Initiative',
+    org: 'Massachusetts Institute of Technology',
+    when: '2013–2014',
   },
 ];
 
@@ -29,67 +44,190 @@ const education = [
   {
     degree: 'PhD, Management Science & Engineering',
     org: 'Stanford University',
+    when: '2011',
   },
-  { degree: 'MS, Mechanical Engineering', org: 'Stanford University' },
+  {
+    degree: 'MS, Mechanical Engineering',
+    org: 'Stanford University',
+    when: '2006',
+  },
   {
     degree: 'B.Tech, Mechanical Engineering',
-    org: 'Indian Institute of Technology (IIT) Delhi',
+    org: 'Indian Institute of Technology, Delhi',
+    when: '2004',
   },
 ];
 
-// Selected, peer-reviewed publications. The full list lives on Google Scholar.
+// Peer-reviewed publications, reverse-chronological (mirrors the PDF CV).
 const publications = [
+  {
+    title: 'The Value of Clean Water: Experimental Evidence from Rural India',
+    authors: 'with Fiona Burlig and Amir Jina',
+    venue: 'American Economic Review, 116(3), 1148–1187',
+    year: 2026,
+    url: 'https://www.aeaweb.org/articles?id=10.1257/aer.20250278',
+  },
   {
     title:
       'Can Pollution Markets Work in Developing Countries? Experimental Evidence from India',
-    authors: 'with M. Greenstone, R. Pande & N. Ryan',
-    venue: 'Quarterly Journal of Economics',
+    authors: 'with Michael Greenstone, Rohini Pande and Nicholas Ryan',
+    venue: 'Quarterly Journal of Economics, 140(2), 1003–1060',
     year: 2025,
     url: 'https://academic.oup.com/qje/article-abstract/140/2/1003/8002857',
   },
   {
     title:
       'The Social Costs of Keystone Species Collapse: Evidence from the Decline of Vultures in India',
-    authors: 'with E. Frank',
-    venue: 'American Economic Review',
+    authors: 'with Eyal Frank',
+    venue: 'American Economic Review, 114(10), 3007–3040 · Lead Article',
     year: 2024,
     url: 'https://www.aeaweb.org/articles?id=10.1257/aer.20230016',
   },
   {
-    title: 'Rationing the Commons',
-    authors: 'with N. Ryan',
-    venue: 'Journal of Political Economy',
-    year: 2022,
-  },
-  {
     title:
       'Modeling Fine-Grained Spatio-Temporal Pollution Maps with Low-Cost Sensors',
-    authors: 'with S. R. Iyer, A. Balashankar et al.',
-    venue: 'npj Climate and Atmospheric Science',
+    authors: 'with Shiva Iyer, Ananth Balashankar, Rohini Pande and others',
+    venue: 'npj Climate and Atmospheric Science, 5, 76',
     year: 2022,
+    url: 'https://www.nature.com/articles/s41612-022-00293-z',
+  },
+  {
+    title: 'Rationing the Commons',
+    authors: 'with Nicholas Ryan',
+    venue: 'Journal of Political Economy, 130(1), 210–257',
+    year: 2022,
+    url: 'https://www.journals.uchicago.edu/doi/10.1086/717045',
   },
   {
     title:
       'The Impact of Temperature on Productivity and Labor Supply: Evidence from Indian Manufacturing',
-    authors: 'with E. Somanathan, R. Somanathan & M. Tewari',
-    venue: 'Journal of Political Economy',
+    authors: 'with E. Somanathan, Rohini Somanathan and Meenu Tewari',
+    venue: 'Journal of Political Economy, 129(6), 1797–1827',
     year: 2021,
     url: 'https://www.journals.uchicago.edu/doi/abs/10.1086/713733',
   },
   {
     title: 'The Consequences of Treating Electricity as a Right',
-    authors: 'with R. Burgess, M. Greenstone & N. Ryan',
-    venue: 'Journal of Economic Perspectives',
+    authors: 'with Robin Burgess, Michael Greenstone and Nicholas Ryan',
+    venue: 'Journal of Economic Perspectives, 34(1), 145–169',
     year: 2020,
     url: 'https://www.aeaweb.org/articles?id=10.1257/jep.34.1.145',
   },
   {
     title:
+      'Nudges in the Marketplace: The Response of Household Electricity Consumption to Information and Monetary Incentives',
+    authors: 'sole author',
+    venue: 'Journal of Economic Behavior & Organization, 134, 320–335',
+    year: 2017,
+    url: 'https://www.sciencedirect.com/science/article/abs/pii/S0167268116302979',
+  },
+  {
+    title: 'The Solvable Challenge of Air Pollution in India',
+    authors: 'with Michael Greenstone, Santosh Harish and Rohini Pande',
+    venue: 'India Policy Forum',
+    year: 2017,
+  },
+  {
+    title:
+      'Lower Pollution, Longer Lives: Life Expectancy Gains if India Reduced Particulate Matter Pollution',
+    authors:
+      'with Michael Greenstone, Janhavi Nilekani, Rohini Pande, Nicholas Ryan and Anish Sugathan',
+    venue: 'Economic and Political Weekly, L(8), 40–46',
+    year: 2015,
+  },
+  {
+    title:
       "Deconstructing the 'Rosenfeld Curve': Making Sense of California's Low Electricity Intensity",
     authors: 'sole author',
-    venue: 'Energy Economics',
+    venue: 'Energy Economics, 39, 197–207',
+    year: 2013,
+    url: 'https://www.sciencedirect.com/science/article/abs/pii/S0140988313000881',
+  },
+  {
+    title:
+      'Real-time Feedback and Electricity Consumption: A Field Experiment Assessing the Potential for Savings and Persistence',
+    authors: 'with Sebastien Houde, Annika Todd, June A. Flora and K. Carrie Armel',
+    venue: 'The Energy Journal, 34(1)',
+    year: 2013,
+    url: 'https://journals.sagepub.com/doi/10.5547/01956574.34.1.4',
+  },
+  {
+    title:
+      'Psychohistory Revisited: Fundamental Issues in Forecasting Climate Futures',
+    authors: 'with Danny Cullenward, Lee Schipper and Richard Howarth',
+    venue: 'Climatic Change, 104(3–4), 457–472',
     year: 2011,
-    url: 'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1715860',
+    url: 'https://link.springer.com/article/10.1007/s10584-010-9995-2',
+  },
+  {
+    title: 'Transport and Carbon Emissions in the United States: The Long View',
+    authors: 'with Lee Schipper and Calanit Saenger',
+    venue: 'Energies, 4(4), 563–581',
+    year: 2011,
+    url: 'https://www.mdpi.com/1996-1073/4/4/563',
+  },
+  {
+    title:
+      'How Can Economic Schemes Curtail the Increasing Sex Ratio at Birth in China?',
+    authors:
+      'with Debarun Bhattacharjya, Shripad Tuljapurkar, Ross Shachter and Marcus Feldman',
+    venue: 'Demographic Research, 19, 1831–1850',
+    year: 2008,
+    url: 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2990196/',
+  },
+  {
+    title: 'Weather Data Mining Using Independent Component Analysis',
+    authors: 'with Jayanta Basak, Deepak Trivedi and M. S. Santhanam',
+    venue: 'Journal of Machine Learning Research, 5, 239–253',
+    year: 2004,
+    url: 'https://www.jmlr.org/papers/v5/basak04a.html',
+  },
+];
+
+const workingPapers = [
+  {
+    title: 'The Demand for Electricity on the Global Electrification Frontier',
+    authors: 'with Robin Burgess, Michael Greenstone and Nicholas Ryan',
+    venue: 'Revise & resubmit, Journal of Political Economy',
+    url: 'https://epic.uchicago.edu/research/demand-for-electricity-on-the-global-electrification-frontier/',
+  },
+  {
+    title: 'Paying for Power',
+    authors: 'with Fiona Burlig',
+    venue: 'Working paper',
+  },
+  {
+    title:
+      'Buying out Distortions: Using Cash Transfers to Induce Farmers in India to Pay for Power and Conserve Water',
+    authors: 'with Nicholas Ryan',
+    venue: 'In preparation',
+  },
+];
+
+const chapters = [
+  {
+    title: "India's Energy Security",
+    authors: 'edited, with Ligia Noronha',
+    venue: 'Routledge Contemporary South Asia Series, New York: Routledge',
+    year: 2009,
+  },
+  {
+    title: 'Monitoring Industrial Pollution in India',
+    authors: 'in T. Madon and A. J. Gadgil (eds), Introduction to Development Engineering',
+    venue: 'Springer Nature, pp. 161–182',
+    year: 2023,
+  },
+  {
+    title: 'Reforming Energy Subsidies',
+    authors:
+      'with Fiona Burlig · in R. Hanna and B. Olken (eds), Handbook of Social Protection in the Developing World',
+    venue: 'MIT Press (forthcoming)',
+  },
+  {
+    title: 'Coal Supply: The Fallacy of Abundance',
+    authors: 'in S. K. Chand (ed.), The Coal Dilemma',
+    venue: 'New Delhi: TERI Press',
+    year: 2008,
   },
 ];
 ---
@@ -99,7 +237,7 @@ const publications = [
     <div class="flex items-baseline justify-between gap-4">
       <h1 class="font-display text-4xl font-semibold tracking-tight">CV</h1>
       <a
-        href="https://www.anantsudarshan.com/uploads/1/0/2/6/10267789/cv-6.pdf"
+        href={url('/anant-sudarshan-cv.pdf')}
         target="_blank"
         rel="noopener"
         class="rounded-md bg-[var(--color-ink)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--color-accent)]"
@@ -108,14 +246,21 @@ const publications = [
     </div>
 
     <p class="mt-4 text-[var(--color-muted)]">
-      A summary of appointments, education and selected publications. The full
-      publication record is on
+      Appointments, education and the full publication record below. The
+      <a
+        href={url('/anant-sudarshan-cv.pdf')}
+        target="_blank"
+        rel="noopener"
+        class="text-[var(--color-accent)] hover:underline">PDF</a
+      >
+      additionally carries grants, professional affiliations, teaching and
+      service; the live list is also on
       <a
         href={SITE.links.scholar}
         target="_blank"
         rel="noopener"
         class="text-[var(--color-accent)] hover:underline">Google Scholar</a
-      >, and the PDF above carries grants, talks and service.
+      >.
     </p>
 
     <div class="mt-10 space-y-12">
@@ -133,8 +278,8 @@ const publications = [
                   <span class="font-medium">{a.role}</span>
                   <span class="text-[var(--color-muted)]"> · {a.org}</span>
                 </div>
-                <span class="text-xs text-[var(--color-muted)] uppercase tracking-wide">
-                  {a.note}
+                <span class="text-xs tracking-wide text-[var(--color-muted)]">
+                  {a.when}
                 </span>
               </li>
             ))
@@ -151,9 +296,14 @@ const publications = [
         <ul class="mt-4 space-y-4">
           {
             education.map((e) => (
-              <li>
-                <span class="font-medium">{e.degree}</span>
-                <span class="text-[var(--color-muted)]"> · {e.org}</span>
+              <li class="flex flex-wrap items-baseline justify-between gap-x-4">
+                <div>
+                  <span class="font-medium">{e.degree}</span>
+                  <span class="text-[var(--color-muted)]"> · {e.org}</span>
+                </div>
+                <span class="text-xs tracking-wide text-[var(--color-muted)]">
+                  {e.when}
+                </span>
               </li>
             ))
           }
@@ -164,7 +314,7 @@ const publications = [
         <h2
           class="text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase"
         >
-          Selected publications
+          Publications
         </h2>
         <ol class="mt-4 space-y-5">
           {
@@ -183,7 +333,59 @@ const publications = [
                   <span class="font-medium">{p.title}</span>
                 )}
                 <p class="mt-1 text-sm text-[var(--color-muted)]">
-                  {p.authors} · <span class="italic">{p.venue}</span>, {p.year}
+                  {p.authors} · <span class="italic">{p.venue}</span> ({p.year})
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div>
+        <h2
+          class="text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase"
+        >
+          Working papers
+        </h2>
+        <ol class="mt-4 space-y-5">
+          {
+            workingPapers.map((p) => (
+              <li class="border-l-2 border-[var(--color-line)] pl-4">
+                {p.url ? (
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener"
+                    class="font-medium hover:text-[var(--color-accent)]"
+                  >
+                    {p.title}
+                  </a>
+                ) : (
+                  <span class="font-medium">{p.title}</span>
+                )}
+                <p class="mt-1 text-sm text-[var(--color-muted)]">
+                  {p.authors} · <span class="italic">{p.venue}</span>
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div>
+        <h2
+          class="text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase"
+        >
+          Books & chapters
+        </h2>
+        <ol class="mt-4 space-y-5">
+          {
+            chapters.map((p) => (
+              <li class="border-l-2 border-[var(--color-line)] pl-4">
+                <span class="font-medium">{p.title}</span>
+                <p class="mt-1 text-sm text-[var(--color-muted)]">
+                  {p.authors} · <span class="italic">{p.venue}</span>
+                  {p.year && <> ({p.year})</>}
                 </p>
               </li>
             ))
