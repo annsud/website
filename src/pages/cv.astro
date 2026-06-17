@@ -219,6 +219,7 @@ const chapters = [
     authors: 'in T. Madon and A. J. Gadgil (eds), Introduction to Development Engineering',
     venue: 'Springer Nature, pp. 161–182',
     year: 2023,
+    url: 'https://link.springer.com/chapter/10.1007/978-3-030-86065-3_7',
   },
   {
     title: 'Reforming Energy Subsidies',
@@ -385,7 +386,18 @@ const chapters = [
           {
             chapters.map((p) => (
               <li class="border-l-2 border-[var(--color-line)] pl-4">
-                <span class="font-medium">{p.title}</span>
+                {p.url ? (
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener"
+                    class="font-medium hover:text-[var(--color-accent)]"
+                  >
+                    {p.title}
+                  </a>
+                ) : (
+                  <span class="font-medium">{p.title}</span>
+                )}
                 <p class="mt-1 text-sm text-[var(--color-muted)]">
                   {p.authors} · <span class="italic">{p.venue}</span>
                   {p.year && <> ({p.year})</>}
