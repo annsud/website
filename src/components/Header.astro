@@ -1,0 +1,40 @@
+---
+import { SITE, NAV, url } from '@/lib/site';
+const path = Astro.url.pathname.replace(/\/$/, '');
+function active(href: string) {
+  const target = url(href).replace(/\/$/, '');
+  return path === target || (href !== '/' && path.startsWith(target));
+}
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-[var(--color-line)] bg-[var(--color-paper)]/85 backdrop-blur"
+>
+  <div
+    class="mx-auto flex max-w-5xl items-center justify-between px-5 py-3.5 sm:px-8"
+  >
+    <a
+      href={url('/')}
+      class="font-display text-lg font-semibold tracking-tight hover:text-[var(--color-accent)]"
+    >
+      {SITE.name}
+    </a>
+    <nav class="flex items-center gap-6 text-sm">
+      {
+        NAV.map((item) => (
+          <a
+            href={url(item.href)}
+            class:list={[
+              'transition-colors hover:text-[var(--color-accent)]',
+              active(item.href)
+                ? 'text-[var(--color-accent)]'
+                : 'text-[var(--color-muted)]',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>

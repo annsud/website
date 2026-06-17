@@ -1,0 +1,24 @@
+---
+import { SITE, url } from '@/lib/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-[var(--color-line)]">
+  <div
+    class="mx-auto flex max-w-5xl flex-col gap-2 px-5 py-10 text-sm text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between sm:px-8"
+  >
+    <p>© {year} {SITE.name}</p>
+    <div class="flex gap-5">
+      <a class="hover:text-[var(--color-accent)]" href={`mailto:${SITE.email}`}
+        >Email</a
+      >
+      <a
+        class="hover:text-[var(--color-accent)]"
+        href={SITE.links.scholar}
+        target="_blank"
+        rel="noopener">Google Scholar</a
+      >
+      <a class="hover:text-[var(--color-accent)]" href={url('/cv')}>CV</a>
+    </div>
+  </div>
+</footer>

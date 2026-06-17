@@ -1,0 +1,72 @@
+---
+import { url } from '@/lib/site';
+// Photo gallery with a lightweight lightbox (click to enlarge). For fieldwork
+// photos, site visits, lab images that give a paper its human texture.
+interface Img {
+  src: string;
+  alt?: string;
+  caption?: string;
+}
+interface Props {
+  images: Img[];
+  heading?: string;
+}
+const { images: raw, heading = 'From the field' } = Astro.props;
+const images = raw.map((im) => ({ ...im, src: url(im.src) }));
+---
+
+{
+  images.length > 0 && (
+    <section class="my-8">
+      <h3 class="mb-3 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
+        {heading}
+      </h3>
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {images.map((im) => (
+          <button
+            class="gallery-item group relative overflow-hidden rounded-lg border border-[var(--color-line)]"
+            data-src={im.src}
+            data-caption={im.caption ?? ''}
+            aria-label="Enlarge photo"
+          >
+            <img
+              src={im.src}
+              alt={im.alt ?? ''}
+              loading="lazy"
+              class="aspect-[4/3] w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </button>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<dialog
+  id="lightbox"
+  class="backdrop:bg-black/70 m-auto max-w-[90vw] bg-transparent p-0"
+>
+  <figure class="m-0">
+    <img id="lightbox-img" src="" alt="" class="max-h-[80vh] rounded-lg" />
+    <figcaption
+      id="lightbox-cap"
+      class="mt-2 text-center text-sm text-white"
+    ></figcaption>
+  </figure>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const img = document.getElementById('lightbox-img') as HTMLImageElement | null;
+  const cap = document.getElementById('lightbox-cap');
+  if (dialog && img && cap) {
+    document.querySelectorAll<HTMLElement>('.gallery-item').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        img.src = btn.dataset.src || '';
+        cap.textContent = btn.dataset.caption || '';
+        dialog.showModal();
+      });
+    });
+    dialog.addEventListener('click', () => dialog.close());
+  }
+</script>

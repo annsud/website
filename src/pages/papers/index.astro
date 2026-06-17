@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaperCard from '@/components/PaperCard.astro';
+
+const papers = (await getCollection('papers')).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return b.data.year - a.data.year;
+});
+
+const topics = Array.from(
+  new Set(papers.flatMap((p) => p.data.topics))
+).sort();
+---
+
+<BaseLayout
+  title="Research"
+  description="Papers, projects and field studies in environmental and energy economics."
+>
+  <div class="mx-auto max-w-3xl px-5 pt-12 pb-2 sm:px-8">
+    <h1 class="font-display text-4xl font-semibold tracking-tight">Research</h1>
+    <p class="mt-3 max-w-prose text-[var(--color-muted)]">
+      Each paper is more than a PDF. Where there's a story to tell — the field
+      experiment behind it, the press it drew, the data you can play with, or
+      where the work is heading next — open the dossier.
+    </p>
+
+    {
+      topics.length > 0 && (
+        <div
+          id="topic-filter"
+          class="mt-7 flex flex-wrap gap-2 border-y border-[var(--color-line)] py-4"
+        >
+          <button
+            data-topic="__all"
+            class="topic-btn rounded-full bg-[var(--color-ink)] px-3 py-1 text-sm text-white"
+          >
+            All
+          </button>
+          {topics.map((t) => (
+            <button
+              data-topic={t}
+              class="topic-btn rounded-full border border-[var(--color-line)] px-3 py-1 text-sm text-[var(--color-muted)] hover:border-[var(--color-accent)]"
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <div id="paper-list" class="mt-2">
+      {
+        papers.map((entry) => (
+          <div class="paper-row" data-topics={entry.data.topics.join('|')}>
+            <PaperCard entry={entry} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const btns = document.querySelectorAll<HTMLButtonElement>('.topic-btn');
+  const rows = document.querySelectorAll<HTMLElement>('.paper-row');
+  const on = 'bg-[var(--color-ink)] text-white';
+  const off = 'border border-[var(--color-line)] text-[var(--color-muted)]';
+
+  function setActive(active: HTMLButtonElement) {
+    btns.forEach((b) => {
+      b.className =
+        'topic-btn rounded-full px-3 py-1 text-sm ' +
+        (b === active ? on : off + ' hover:border-[var(--color-accent)]');
+    });
+  }
+
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const topic = btn.dataset.topic;
+      setActive(btn);
+      rows.forEach((row) => {
+        const topics = (row.dataset.topics || '').split('|');
+        const show = topic === '__all' || topics.includes(topic || '');
+        row.style.display = show ? '' : 'none';
+      });
+    });
+  });
+</script>

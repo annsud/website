@@ -1,0 +1,99 @@
+---
+// Interactive scientific chart (Observable Plot). Renders client-side with
+// hover tooltips and responsive resizing. Pass tidy data: [{x, y, series?}].
+// This is the "make the figure come alive" block for dossier pages.
+interface Datum {
+  x: number | string;
+  y: number;
+  series?: string;
+}
+interface Props {
+  data: Datum[];
+  type?: 'line' | 'area' | 'bar';
+  xLabel?: string;
+  yLabel?: string;
+  caption?: string;
+}
+const {
+  data,
+  type = 'line',
+  xLabel = '',
+  yLabel = '',
+  caption,
+} = Astro.props;
+const id = `plot-${Math.random().toString(36).slice(2, 9)}`;
+const payload = JSON.stringify({ data, type, xLabel, yLabel });
+---
+
+<figure class="my-8">
+  <div
+    id={id}
+    class="plot w-full rounded-lg border border-[var(--color-line)] bg-white p-3"
+    data-spec={payload}
+  >
+  </div>
+  {
+    caption && (
+      <figcaption class="mt-2 text-sm text-[var(--color-muted)]">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>
+
+<script>
+  import * as Plot from '@observablehq/plot';
+
+  function draw(el: HTMLElement) {
+    const spec = JSON.parse(el.dataset.spec || '{}');
+    const { data, type, xLabel, yLabel } = spec;
+    const width = el.clientWidth || 640;
+    const accent = '#b3431f';
+
+    const color = { legend: true };
+    const marks: any[] = [Plot.ruleY([0], { stroke: '#e6e1d8' })];
+    const common = { x: 'x', y: 'y', stroke: 'series', fill: 'series' };
+
+    if (type === 'bar') {
+      marks.push(Plot.barY(data, { x: 'x', y: 'y', fill: accent }));
+    } else if (type === 'area') {
+      marks.push(
+        Plot.areaY(data, { x: 'x', y: 'y', fill: accent, fillOpacity: 0.15 }),
+        Plot.lineY(data, { x: 'x', y: 'y', stroke: accent, strokeWidth: 2 })
+      );
+    } else {
+      marks.push(
+        Plot.lineY(data, { x: common.x, y: common.y, stroke: common.stroke, strokeWidth: 2 })
+      );
+    }
+    // Interactive hover tooltip.
+    marks.push(
+      Plot.tip(
+        data,
+        Plot.pointer({ x: 'x', y: 'y', stroke: 'series' })
+      )
+    );
+
+    const chart = Plot.plot({
+      width,
+      height: Math.round(width * 0.52),
+      marginLeft: 52,
+      marginBottom: 38,
+      x: { label: xLabel, grid: false },
+      y: { label: yLabel, grid: true },
+      color,
+      marks,
+      style: { fontFamily: 'Inter, sans-serif', background: 'transparent' },
+    });
+    el.replaceChildren(chart);
+  }
+
+  document.querySelectorAll<HTMLElement>('.plot').forEach((el) => {
+    draw(el);
+    let t: number | undefined;
+    new ResizeObserver(() => {
+      window.clearTimeout(t);
+      t = window.setTimeout(() => draw(el), 150);
+    }).observe(el);
+  });
+</script>

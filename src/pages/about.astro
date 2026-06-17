@@ -1,0 +1,53 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SITE, url } from '@/lib/site';
+---
+
+<BaseLayout title="About">
+  <section class="mx-auto max-w-3xl px-5 pt-12 pb-4 sm:px-8">
+    <h1 class="font-display text-4xl font-semibold tracking-tight">About</h1>
+
+    <div class="prose-editorial mt-6">
+      <p>
+        Anant Sudarshan is an environmental and energy economist working at the
+        intersection of economics and engineering. His research spans
+        environmental regulation, air pollution, climate change, energy
+        efficiency, electricity and renewable energy — much of it built on field
+        experiments and administrative data from India.
+      </p>
+      <p>
+        He is on the faculty of the Department of Economics at the University of
+        Warwick and a non-resident scholar at the Energy Policy Institute at the
+        University of Chicago (EPIC), where he previously served as South Asia
+        Director. He holds a PhD in Management Science and Engineering from
+        Stanford University, and degrees in mechanical engineering from IIT Delhi
+        and Stanford.
+      </p>
+      <p class="text-[var(--color-muted)] italic">
+        This bio is a working draft assembled from public sources — it will be
+        replaced with your own text from the current site once the content
+        import runs.
+      </p>
+    </div>
+
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href={url('/cv')}
+        class="rounded-md border border-[var(--color-line)] px-4 py-2 text-sm font-medium hover:border-[var(--color-accent)]"
+        >Curriculum vitae</a
+      >
+      <a
+        href={`mailto:${SITE.email}`}
+        class="rounded-md border border-[var(--color-line)] px-4 py-2 text-sm font-medium hover:border-[var(--color-accent)]"
+        >Email</a
+      >
+      <a
+        href={SITE.links.scholar}
+        target="_blank"
+        rel="noopener"
+        class="rounded-md border border-[var(--color-line)] px-4 py-2 text-sm font-medium hover:border-[var(--color-accent)]"
+        >Google Scholar</a
+      >
+    </div>
+  </section>
+</BaseLayout>

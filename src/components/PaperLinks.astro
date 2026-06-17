@@ -1,0 +1,41 @@
+---
+// Renders the `links` object as a row of labelled buttons, in a sensible order.
+interface Props {
+  links: Record<string, string | undefined>;
+  size?: 'sm' | 'md';
+}
+const { links, size = 'md' } = Astro.props;
+const order: [string, string][] = [
+  ['pdf', 'PDF'],
+  ['journal', 'Journal'],
+  ['nber', 'NBER'],
+  ['arxiv', 'arXiv'],
+  ['ssrn', 'SSRN'],
+  ['website', 'Project site'],
+  ['code', 'Code'],
+  ['data', 'Data'],
+  ['slides', 'Slides'],
+];
+const present = order.filter(([k]) => links[k]);
+const pad = size === 'sm' ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-sm';
+---
+
+{
+  present.length > 0 && (
+    <div class="flex flex-wrap gap-2">
+      {present.map(([k, label]) => (
+        <a
+          href={links[k]}
+          target="_blank"
+          rel="noopener"
+          class:list={[
+            'rounded-md border border-[var(--color-line)] font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
+            pad,
+          ]}
+        >
+          {label}
+        </a>
+      ))}
+    </div>
+  )
+}

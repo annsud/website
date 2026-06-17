@@ -1,0 +1,31 @@
+---
+import { url } from '@/lib/site';
+// A captioned figure. `src` may be a root-relative public path
+// (e.g. /papers/slug/fig.png) — it is automatically base-prefixed.
+interface Props {
+  src: string;
+  alt?: string;
+  caption?: string;
+  credit?: string;
+  wide?: boolean;
+}
+const { src, alt = '', caption, credit, wide = false } = Astro.props;
+const resolved = url(src);
+---
+
+<figure class:list={['my-8', wide ? 'lg:-mx-24' : '']}>
+  <img
+    src={resolved}
+    alt={alt}
+    loading="lazy"
+    class="w-full rounded-lg border border-[var(--color-line)] bg-white"
+  />
+  {
+    (caption || credit) && (
+      <figcaption class="mt-2 text-sm text-[var(--color-muted)]">
+        {caption}
+        {credit && <span class="italic"> — {credit}</span>}
+      </figcaption>
+    )
+  }
+</figure>

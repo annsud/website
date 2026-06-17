@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="CV">
+  <section class="mx-auto max-w-3xl px-5 pt-12 pb-4 sm:px-8">
+    <div class="flex items-baseline justify-between">
+      <h1 class="font-display text-4xl font-semibold tracking-tight">CV</h1>
+      <a
+        href="https://www.anantsudarshan.com/uploads/1/0/2/6/10267789/cv-6.pdf"
+        target="_blank"
+        rel="noopener"
+        class="rounded-md bg-[var(--color-ink)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--color-accent)]"
+        >Download PDF</a
+      >
+    </div>
+
+    <p class="mt-4 text-[var(--color-muted)]">
+      A structured, web-native CV will live here — appointments, education,
+      publications, grants, talks and service — generated from the same data
+      that powers the research pages. For now, the PDF is the source of truth.
+    </p>
+
+    <!-- Placeholder structure to be filled from the imported CV. -->
+    <div class="mt-8 space-y-8">
+      <div>
+        <h2
+          class="text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase"
+        >
+          Appointments
+        </h2>
+        <p class="prose-editorial mt-2">
+          University of Warwick · EPIC, University of Chicago — to be populated
+          from your CV.
+        </p>
+      </div>
+      <div>
+        <h2
+          class="text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase"
+        >
+          Education
+        </h2>
+        <p class="prose-editorial mt-2">
+          PhD, Stanford University · IIT Delhi — to be populated from your CV.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

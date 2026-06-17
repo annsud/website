@@ -1,0 +1,109 @@
+---
+title: 'Can Pollution Markets Work in Developing Countries? Experimental Evidence from India'
+authors:
+  - Michael Greenstone
+  - Rohini Pande
+  - Nicholas Ryan
+  - Anant Sudarshan
+year: 2025
+venue: 'Quarterly Journal of Economics'
+status: published
+tier: 2
+featured: true
+draft: true
+summary: 'We built and ran the world’s first market for particulate air pollution — a cap-and-trade scheme among industrial plants in Surat — as a randomized controlled trial, and found it cut emissions while lowering firms’ costs.'
+abstract: 'Pollution markets are widely used in rich countries but almost untried where enforcement is weak and monitoring sparse. Working with the Gujarat Pollution Control Board, we designed and launched an emissions trading scheme for particulate matter among hundreds of industrial plants in Surat, and evaluated it with a randomized controlled trial. Plants in the market held emissions below the cap, achieved large reductions relative to control plants, and did so at lower abatement cost — evidence that market-based environmental regulation can work in a developing-country setting.'
+topics:
+  - Air pollution
+  - Environmental regulation
+  - Markets
+teaser: /papers/surat-emissions-market/teaser.svg
+teaserAlt: Industrial skyline over Surat
+links:
+  website: https://emissionsmarkets.org
+  journal: '#'
+  nber: '#'
+press:
+  - outlet: EPIC
+    title: 'Learnings from emissions trade in India'
+    url: https://epic.uchicago.edu/insights/learnings-from-emissions-trade-in-india-anant-sudarshan-michael-greenston/
+    date: '2024'
+  - outlet: '[verify]'
+    title: 'Placeholder — additional press to be imported from your site'
+    url: '#'
+awards:
+  - title: 'Placeholder award / recognition'
+    org: 'to be verified'
+followUps:
+  - title: 'Scaling particulate markets to other Indian cities'
+    status: ongoing
+    blurb: 'Working with state pollution control boards to extend the Surat design.'
+  - title: 'Long-run health effects of sustained market operation'
+    status: planned
+    blurb: 'Linking emissions data to administrative health records.'
+bibtex: |
+  @article{greenstone2025pollution,
+    title   = {Can Pollution Markets Work in Developing Countries? Experimental Evidence from India},
+    author  = {Greenstone, Michael and Pande, Rohini and Ryan, Nicholas and Sudarshan, Anant},
+    journal = {Quarterly Journal of Economics},
+    year    = {2025}
+  }
+---
+
+import Figure from '@/components/Figure.astro';
+import Plot from '@/components/Plot.astro';
+import CompareSlider from '@/components/CompareSlider.astro';
+import Gallery from '@/components/Gallery.astro';
+
+export const pm = [
+  { x: 2019.0, y: 280, series: 'Control plants' },
+  { x: 2019.5, y: 272, series: 'Control plants' },
+  { x: 2020.0, y: 268, series: 'Control plants' },
+  { x: 2020.5, y: 275, series: 'Control plants' },
+  { x: 2021.0, y: 270, series: 'Control plants' },
+  { x: 2019.0, y: 278, series: 'Market plants' },
+  { x: 2019.5, y: 235, series: 'Market plants' },
+  { x: 2020.0, y: 198, series: 'Market plants' },
+  { x: 2020.5, y: 185, series: 'Market plants' },
+  { x: 2021.0, y: 176, series: 'Market plants' },
+];
+
+## The story behind the paper
+
+Cap-and-trade is a textbook idea: set a total limit on pollution, hand out permits, and let firms trade so that whoever can cut most cheaply does. It works in places like the United States and Europe. The open question — the one regulators across the developing world kept asking — was whether it could possibly work where monitoring is thin and enforcement is weak.
+
+So we did not just study a market. **We built one**, together with the Gujarat Pollution Control Board: the world's first cap-and-trade scheme for *particulate* air pollution, covering industrial plants in the textile city of Surat. And we evaluated it the way you'd evaluate a drug — a randomized controlled trial, with some plants entering the market and others continuing under the status quo.
+
+### What we found
+
+Plants in the market kept their emissions below the cap, cut pollution sharply relative to control plants, and spent *less* on abatement than command-and-control would have required. The figure below traces measured particulate emissions for market versus control plants over the trial — drag along the line to read values.
+
+<Plot
+  data={pm}
+  type="line"
+  xLabel="Year"
+  yLabel="PM emissions (illustrative units)"
+  caption="Illustrative data for layout — to be replaced with the paper's real series. Hover to inspect."
+/>
+
+The cleanest way to feel the result is to look at the air itself. Slide between the business-as-usual scenario and the market scenario:
+
+<CompareSlider
+  before="/papers/surat-emissions-market/before.svg"
+  after="/papers/surat-emissions-market/after.svg"
+  beforeLabel="Business as usual"
+  afterLabel="Under the market"
+  caption="Placeholder visuals — swap for real monitoring imagery or maps."
+/>
+
+### Why it mattered
+
+A working pollution market in a low-enforcement setting is not just an academic result — it is a template other regulators can copy. The scheme has since informed conversations about extending emissions trading to other pollutants and other cities.
+
+<Gallery
+  images={[
+    { src: '/papers/surat-emissions-market/field-1.svg', caption: 'Plant visit during scheme rollout (placeholder).' },
+    { src: '/papers/surat-emissions-market/field-2.svg', caption: 'Continuous emissions monitoring device (placeholder).' },
+    { src: '/papers/surat-emissions-market/field-3.svg', caption: 'Field team in Surat (placeholder).' },
+  ]}
+/>

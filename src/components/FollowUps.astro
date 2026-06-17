@@ -1,0 +1,61 @@
+---
+interface Item {
+  title: string;
+  status?: 'planned' | 'ongoing' | 'under review';
+  blurb?: string;
+  url?: string;
+}
+interface Props {
+  items: Item[];
+  heading?: string;
+}
+const { items, heading = 'Where this is going next' } = Astro.props;
+const statusColor: Record<string, string> = {
+  planned: 'bg-slate-100 text-slate-600',
+  ongoing: 'bg-emerald-100 text-emerald-700',
+  'under review': 'bg-amber-100 text-amber-700',
+};
+---
+
+{
+  items.length > 0 && (
+    <section class="my-8">
+      <h3 class="mb-3 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
+        {heading}
+      </h3>
+      <div class="grid gap-3 sm:grid-cols-2">
+        {items.map((it) => {
+          const Tag = it.url ? 'a' : 'div';
+          return (
+            <Tag
+              href={it.url}
+              target={it.url ? '_blank' : undefined}
+              rel={it.url ? 'noopener' : undefined}
+              class:list={[
+                'block rounded-lg border border-[var(--color-line)] bg-white p-4',
+                it.url && 'transition-colors hover:border-[var(--color-accent)]',
+              ]}
+            >
+              <div class="mb-1.5 flex items-center gap-2">
+                {it.status && (
+                  <span
+                    class:list={[
+                      'rounded-full px-2 py-0.5 text-[0.7rem] font-medium',
+                      statusColor[it.status],
+                    ]}
+                  >
+                    {it.status}
+                  </span>
+                )}
+              </div>
+              <p class="font-medium">{it.title}</p>
+              {it.blurb && (
+                <p class="mt-1 text-sm text-[var(--color-muted)]">{it.blurb}</p>
+              )}
+            </Tag>
+          );
+        })}
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="High pollution placeholder">
+  <rect width="800" height="500" fill="#9a8f7d"/>
+  <rect width="800" height="500" fill="#b0a48f" opacity="0.6"/>
+  <g fill="#6f6655" opacity="0.7">
+    <rect x="60" y="260" width="80" height="240"/>
+    <rect x="180" y="210" width="90" height="290"/>
+    <rect x="320" y="250" width="70" height="250"/>
+    <rect x="520" y="230" width="90" height="270"/>
+    <rect x="650" y="280" width="80" height="220"/>
+  </g>
+  <rect width="800" height="500" fill="#cdbfa6" opacity="0.45"/>
+  <text x="30" y="44" font-family="Inter, sans-serif" font-size="22" font-weight="600" fill="#3a3631">High particulate load</text>
+  <text x="30" y="72" font-family="Inter, sans-serif" font-size="14" fill="#5a5345">before / business-as-usual — placeholder</text>
+</svg>

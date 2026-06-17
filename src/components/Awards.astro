@@ -1,0 +1,35 @@
+---
+interface Item {
+  title: string;
+  org?: string;
+  year?: number;
+}
+interface Props {
+  items: Item[];
+  heading?: string;
+}
+const { items, heading = 'Recognition' } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <section class="my-8">
+      <h3 class="mb-3 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
+        {heading}
+      </h3>
+      <ul class="flex flex-wrap gap-3">
+        {items.map((it) => (
+          <li class="flex items-center gap-2 rounded-full border border-[var(--color-line)] bg-[var(--color-accent-soft)] px-3.5 py-1.5 text-sm">
+            <span aria-hidden="true">★</span>
+            <span class="font-medium">{it.title}</span>
+            {(it.org || it.year) && (
+              <span class="text-[var(--color-muted)]">
+                {[it.org, it.year].filter(Boolean).join(' · ')}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

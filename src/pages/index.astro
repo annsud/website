@@ -1,0 +1,101 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaperCard from '@/components/PaperCard.astro';
+import { SITE, url } from '@/lib/site';
+
+const featured = (await getCollection('papers'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 3);
+
+const themes = [
+  { title: 'Air pollution', blurb: 'Markets, monitoring and the health costs of dirty air.' },
+  { title: 'Environmental regulation', blurb: 'Designing and testing rules that actually bite.' },
+  { title: 'Energy & electricity', blurb: 'Access, efficiency, pricing and the grid in the Global South.' },
+  { title: 'Climate change', blurb: 'Adaptation, temperature and the economics of a warming world.' },
+];
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="mx-auto max-w-5xl px-5 pt-16 pb-12 sm:px-8">
+    <div class="grid items-center gap-10 sm:grid-cols-[1.4fr_1fr]">
+      <div class="rise">
+        <p
+          class="mb-3 text-sm font-medium tracking-[0.12em] text-[var(--color-accent)] uppercase"
+        >
+          {SITE.role}
+        </p>
+        <h1
+          class="font-display text-4xl leading-[1.05] font-semibold tracking-tight sm:text-6xl"
+        >
+          {SITE.name}
+        </h1>
+        <p class="mt-5 max-w-xl text-lg text-[#2a2824]">
+          {SITE.description}
+        </p>
+        <p class="mt-4 text-sm text-[var(--color-muted)]">{SITE.affiliation}</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a
+            href={url('/papers')}
+            class="rounded-md bg-[var(--color-ink)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)]"
+          >
+            Explore the research →
+          </a>
+          <a
+            href={url('/about')}
+            class="rounded-md border border-[var(--color-line)] px-4 py-2 text-sm font-medium transition-colors hover:border-[var(--color-accent)]"
+          >
+            About
+          </a>
+        </div>
+      </div>
+
+      <div class="rise justify-self-center">
+        <img
+          src={url('/portrait.svg')}
+          alt={`Portrait of ${SITE.name}`}
+          class="aspect-[4/5] w-56 rounded-2xl border border-[var(--color-line)] object-cover shadow-sm sm:w-full"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Selected work -->
+  {
+    featured.length > 0 && (
+      <section class="mx-auto max-w-3xl px-5 sm:px-8">
+        <div class="flex items-baseline justify-between">
+          <h2 class="font-display text-2xl font-semibold">Selected work</h2>
+          <a
+            href={url('/papers')}
+            class="text-sm font-medium text-[var(--color-accent)] hover:underline"
+          >
+            All research →
+          </a>
+        </div>
+        <div class="mt-4">
+          {featured.map((entry) => (
+            <PaperCard entry={entry} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Research themes -->
+  <section class="mx-auto mt-16 max-w-5xl px-5 sm:px-8">
+    <h2 class="font-display text-2xl font-semibold">What I work on</h2>
+    <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        themes.map((t) => (
+          <div class="rounded-xl border border-[var(--color-line)] bg-white p-5">
+            <h3 class="font-display text-lg font-semibold">{t.title}</h3>
+            <p class="mt-2 text-sm text-[var(--color-muted)]">{t.blurb}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

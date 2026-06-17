@@ -1,0 +1,122 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import { url } from '@/lib/site';
+import { authorParts, statusLabel } from '@/lib/format';
+import PaperLinks from '@/components/PaperLinks.astro';
+import PressList from '@/components/PressList.astro';
+import Awards from '@/components/Awards.astro';
+import FollowUps from '@/components/FollowUps.astro';
+
+interface Props {
+  entry: CollectionEntry<'papers'>;
+}
+const { entry } = Astro.props;
+const p = entry.data;
+const authors = authorParts(p.authors);
+const teaser = p.teaser ? url(p.teaser) : null;
+---
+
+<BaseLayout title={p.title} description={p.summary}>
+  <article class="mx-auto max-w-3xl px-5 pt-10 pb-4 sm:px-8">
+    <a
+      href={url('/papers')}
+      class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)]"
+      >← All research</a
+    >
+
+    {
+      p.draft && (
+        <p class="mt-4 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-800">
+          Draft content — auto-assembled and awaiting Anant's review.
+        </p>
+      )
+    }
+
+    <header class="mt-5">
+      <div
+        class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--color-muted)]"
+      >
+        <span class="font-medium text-[var(--color-accent)]"
+          >{statusLabel(p.status)}</span
+        >
+        <span>{p.year}</span>
+        {p.venue && <span class="italic">{p.venue}</span>}
+      </div>
+
+      <h1 class="font-display text-3xl leading-tight font-semibold sm:text-4xl">
+        {p.title}
+      </h1>
+
+      <p class="mt-3 text-[var(--color-muted)]">
+        {
+          authors.map((a, i) => (
+            <>
+              {i > 0 && ', '}
+              <span
+                class:list={[a.me && 'font-semibold text-[var(--color-ink)]']}
+              >
+                {a.name}
+              </span>
+            </>
+          ))
+        }
+      </p>
+
+      {
+        p.topics.length > 0 && (
+          <div class="mt-3 flex flex-wrap gap-2">
+            {p.topics.map((t) => (
+              <span class="rounded-full border border-[var(--color-line)] px-2.5 py-0.5 text-xs text-[var(--color-muted)]">
+                {t}
+              </span>
+            ))}
+          </div>
+        )
+      }
+
+      <div class="mt-5">
+        <PaperLinks links={p.links} />
+      </div>
+    </header>
+
+    {
+      teaser && (
+        <img
+          src={teaser}
+          alt={p.teaserAlt ?? ''}
+          class="mt-8 w-full rounded-xl border border-[var(--color-line)] object-cover"
+        />
+      )
+    }
+
+    {
+      p.abstract && (
+        <p class="prose-editorial mt-8 border-l-2 border-[var(--color-accent)] pl-4 text-[var(--color-muted)] italic">
+          {p.abstract}
+        </p>
+      )
+    }
+
+    <!-- The paper's MDX body: story + interactive blocks. -->
+    <div class="prose-editorial mt-2">
+      <slot />
+    </div>
+
+    <!-- Auto-rendered from frontmatter so you never hand-place these. -->
+    <Awards items={p.awards} />
+    <FollowUps items={p.followUps} />
+    <PressList items={p.press} />
+
+    {
+      p.bibtex && (
+        <section class="my-10">
+          <h3 class="mb-3 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
+            Cite
+          </h3>
+          <pre class="overflow-x-auto rounded-lg border border-[var(--color-line)] bg-white p-4 text-xs leading-relaxed">{p.bibtex}</pre>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>

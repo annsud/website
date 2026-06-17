@@ -1,0 +1,19 @@
+---
+import { getCollection, render } from 'astro:content';
+import PaperLayout from '@/layouts/PaperLayout.astro';
+
+// Tier 0 papers are entry-only (shown on the index); tier 1 & 2 get a page.
+export async function getStaticPaths() {
+  const papers = await getCollection('papers');
+  return papers
+    .filter((p) => p.data.tier >= 1)
+    .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<PaperLayout entry={entry}>
+  <Content />
+</PaperLayout>
