@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - claude/ecstatic-carson-6d6616
+      - claude/dazzling-hypatia-9vladt
   workflow_dispatch:
 
 permissions:
