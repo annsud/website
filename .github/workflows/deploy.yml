@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-      - claude/ecstatic-carson-6d6616
-      - claude/dazzling-hypatia-9vladt
   workflow_dispatch:
 
 permissions:
@@ -24,6 +22,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          # Enable GitHub Pages automatically on first run so no manual
+          # Settings -> Pages toggle is required.
+          enablement: true
       - name: Build with Astro
         uses: withastro/action@v3
 
