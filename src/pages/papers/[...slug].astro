@@ -2,11 +2,12 @@
 import { getCollection, render } from 'astro:content';
 import PaperLayout from '@/layouts/PaperLayout.astro';
 
-// Tier 0 papers are entry-only (shown on the index); tier 1 & 2 get a page.
+// Only tier-2 "dossier" papers get a dedicated page. Every other paper shows
+// its abstract + media inline (expandable) on the research index.
 export async function getStaticPaths() {
   const papers = await getCollection('papers');
   return papers
-    .filter((p) => p.data.tier >= 1)
+    .filter((p) => p.data.tier === 2)
     .map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
 

@@ -5,6 +5,7 @@ import { authorParts, statusLabel } from '@/lib/format';
 import PaperLinks from './PaperLinks.astro';
 import PressList from './PressList.astro';
 import Awards from './Awards.astro';
+import FollowUps from './FollowUps.astro';
 
 interface Props {
   entry: CollectionEntry<'papers'>;
@@ -13,8 +14,11 @@ const { entry } = Astro.props;
 const p = entry.data;
 const href = url(`/papers/${entry.id}`);
 const authors = authorParts(p.authors);
-const hasDossier = p.tier >= 1; // tier 1 & 2 get their own page
+const hasDossier = p.tier === 2; // only dossiers get a dedicated page
 const teaser = p.teaser ? url(p.teaser) : null;
+const hasExtra = Boolean(
+  p.abstract || p.press.length || p.awards.length || p.followUps.length
+);
 ---
 
 <article
@@ -30,7 +34,7 @@ const teaser = p.teaser ? url(p.teaser) : null;
       <span>{p.year}</span>
       {p.venue && <span class="italic">{p.venue}</span>}
       {
-        p.tier === 2 && (
+        hasDossier && (
           <span class="rounded-full bg-[var(--color-accent-soft)] px-2 py-0.5 font-medium text-[var(--color-accent)]">
             Dossier
           </span>
@@ -73,28 +77,37 @@ const teaser = p.teaser ? url(p.teaser) : null;
             href={href}
             class="text-sm font-medium text-[var(--color-accent)] hover:underline"
           >
-            {p.tier === 2 ? 'Open dossier' : 'More on this paper'} →
+            Open dossier →
           </a>
         )
       }
     </div>
 
-    {/* Tier 1: a quick inline peek without leaving the list. */}
+    {/* Lightweight inline reveal: abstract + media, no page load. */}
     {
-      p.tier === 1 && (p.press.length > 0 || p.awards.length > 0) && (
-        <details class="mt-4 rounded-lg border border-[var(--color-line)] bg-white/60 p-4 [&[open]>summary]:mb-2">
-          <summary class="cursor-pointer list-none text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-accent)]">
-            Show press &amp; recognition ↓
+      hasExtra && (
+        <details class="mt-4 rounded-lg border border-[var(--color-line)] bg-white/60 px-4 [&[open]>summary>.chev]:rotate-180">
+          <summary class="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-accent)]">
+            <span>Abstract &amp; media</span>
+            <span class="chev text-xs transition-transform">▾</span>
           </summary>
-          <Awards items={p.awards} />
-          <PressList items={p.press} />
+          <div class="pb-1">
+            {p.abstract && (
+              <p class="prose-editorial border-l-2 border-[var(--color-accent)] pl-4 text-[var(--color-muted)] italic">
+                {p.abstract}
+              </p>
+            )}
+            <Awards items={p.awards} />
+            <FollowUps items={p.followUps} heading="Related projects & impact" />
+            <PressList items={p.press} heading="Media & press" />
+          </div>
         </details>
       )
     }
   </div>
 
   {
-    teaser && p.tier === 2 && (
+    teaser && hasDossier && (
       <a href={href} class="block shrink-0 sm:w-44">
         <img
           src={teaser}

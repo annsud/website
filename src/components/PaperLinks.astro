@@ -1,5 +1,6 @@
 ---
 // Renders the `links` object as a row of labelled buttons, in a sensible order.
+import { url } from '@/lib/site';
 interface Props {
   links: Record<string, string | undefined>;
   size?: 'sm' | 'md';
@@ -25,7 +26,7 @@ const pad = size === 'sm' ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-sm';
     <div class="flex flex-wrap gap-2">
       {present.map(([k, label]) => (
         <a
-          href={links[k]}
+          href={url(links[k]!)}
           target="_blank"
           rel="noopener"
           class:list={[
