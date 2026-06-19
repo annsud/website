@@ -17,11 +17,13 @@ const featured = (await getCollection('papers'))
   <section class="mx-auto max-w-5xl px-5 pt-16 pb-12 sm:px-8">
     <div class="grid items-center gap-10 sm:grid-cols-[1.4fr_1fr]">
       <div class="rise">
-        <p
-          class="mb-3 text-sm font-semibold tracking-[0.12em] text-[var(--color-accent)] uppercase"
-        >
-          {SITE.role}
-        </p>
+        {
+          SITE.role && (
+            <p class="mb-3 text-sm font-semibold tracking-[0.12em] text-[var(--color-accent)] uppercase">
+              {SITE.role}
+            </p>
+          )
+        }
         <h1
           class="font-display text-4xl leading-[1.05] font-semibold tracking-tight sm:text-6xl"
         >
