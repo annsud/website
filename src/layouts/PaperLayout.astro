@@ -7,6 +7,7 @@ import PaperLinks from '@/components/PaperLinks.astro';
 import PressList from '@/components/PressList.astro';
 import Awards from '@/components/Awards.astro';
 import FollowUps from '@/components/FollowUps.astro';
+import Cite from '@/components/Cite.astro';
 
 interface Props {
   entry: CollectionEntry<'papers'>;
@@ -14,7 +15,6 @@ interface Props {
 const { entry } = Astro.props;
 const p = entry.data;
 const authors = authorParts(p.authors);
-const teaser = p.teaser ? url(p.teaser) : null;
 ---
 
 <BaseLayout title={p.title} description={p.summary}>
@@ -25,23 +25,19 @@ const teaser = p.teaser ? url(p.teaser) : null;
       >← All research</a
     >
 
-    {
-      p.draft && (
-        <p class="mt-4 rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-800">
-          Draft content — auto-assembled and awaiting Anant's review.
-        </p>
-      )
-    }
-
     <header class="mt-5">
       <div
         class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--color-muted)]"
       >
-        <span class="font-medium text-[var(--color-accent)]"
-          >{statusLabel(p.status)}</span
-        >
+        <span class="font-medium">{statusLabel(p.status)}</span>
         <span>{p.year}</span>
-        {p.venue && <span class="italic">{p.venue}</span>}
+        {
+          p.venue && (
+            <span class="text-base font-semibold text-[var(--color-accent)]">
+              {p.venue}
+            </span>
+          )
+        }
       </div>
 
       <h1 class="font-display text-3xl leading-tight font-semibold sm:text-4xl">
@@ -75,20 +71,11 @@ const teaser = p.teaser ? url(p.teaser) : null;
         )
       }
 
-      <div class="mt-5">
+      <div class="mt-5 flex flex-wrap items-center gap-3">
         <PaperLinks links={p.links} />
+        <Cite data={p} />
       </div>
     </header>
-
-    {
-      teaser && (
-        <img
-          src={teaser}
-          alt={p.teaserAlt ?? ''}
-          class="mt-8 w-full rounded-xl border border-[var(--color-line)] object-cover"
-        />
-      )
-    }
 
     {
       p.abstract && (
@@ -103,20 +90,9 @@ const teaser = p.teaser ? url(p.teaser) : null;
       <slot />
     </div>
 
-    <!-- Auto-rendered from frontmatter so you never hand-place these. -->
+    <!-- Auto-rendered from frontmatter. -->
     <Awards items={p.awards} />
     <FollowUps items={p.followUps} />
     <PressList items={p.press} />
-
-    {
-      p.bibtex && (
-        <section class="my-10">
-          <h3 class="mb-3 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
-            Cite
-          </h3>
-          <pre class="overflow-x-auto rounded-lg border border-[var(--color-line)] bg-white p-4 text-xs leading-relaxed">{p.bibtex}</pre>
-        </section>
-      )
-    }
   </article>
 </BaseLayout>

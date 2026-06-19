@@ -1,7 +1,7 @@
 ---
 // Interactive scientific chart (Observable Plot). Renders client-side with
 // hover tooltips and responsive resizing. Pass tidy data: [{x, y, series?}].
-// This is the "make the figure come alive" block for dossier pages.
+// This is the "make the figure come alive" block for project pages.
 interface Datum {
   x: number | string;
   y: number;
@@ -48,7 +48,7 @@ const payload = JSON.stringify({ data, type, xLabel, yLabel });
     const spec = JSON.parse(el.dataset.spec || '{}');
     const { data, type, xLabel, yLabel } = spec;
     const width = el.clientWidth || 640;
-    const accent = '#b3431f';
+    const accent = '#2563eb';
 
     const color = { legend: true };
     const marks: any[] = [Plot.ruleY([0], { stroke: '#e6e1d8' })];

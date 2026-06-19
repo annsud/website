@@ -15,20 +15,20 @@ function active(href: string) {
   >
     <a
       href={url('/')}
-      class="font-display text-lg font-semibold tracking-tight hover:text-[var(--color-accent)]"
+      class="font-display text-xl font-semibold tracking-tight hover:text-[var(--color-accent)]"
     >
       {SITE.name}
     </a>
-    <nav class="flex items-center gap-6 text-sm">
+    <nav class="flex items-center gap-7 text-[0.95rem]">
       {
         NAV.map((item) => (
           <a
             href={url(item.href)}
             class:list={[
-              'transition-colors hover:text-[var(--color-accent)]',
+              'font-semibold transition-colors hover:text-[var(--color-accent)]',
               active(item.href)
                 ? 'text-[var(--color-accent)]'
-                : 'text-[var(--color-muted)]',
+                : 'text-[var(--color-ink)]',
             ]}
           >
             {item.label}

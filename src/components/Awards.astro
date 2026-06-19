@@ -3,6 +3,7 @@ interface Item {
   title: string;
   org?: string;
   year?: number;
+  url?: string;
 }
 interface Props {
   items: Item[];
@@ -13,22 +14,35 @@ const { items, heading = 'Recognition' } = Astro.props;
 
 {
   items.length > 0 && (
-    <section class="my-8">
-      <h3 class="mb-3 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
+    <section class="my-6">
+      <h3 class="mb-2 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
         {heading}
       </h3>
       <ul class="flex flex-wrap gap-3">
-        {items.map((it) => (
-          <li class="flex items-center gap-2 rounded-full border border-[var(--color-line)] bg-[var(--color-accent-soft)] px-3.5 py-1.5 text-sm">
-            <span aria-hidden="true">★</span>
-            <span class="font-medium">{it.title}</span>
-            {(it.org || it.year) && (
-              <span class="text-[var(--color-muted)]">
-                {[it.org, it.year].filter(Boolean).join(' · ')}
-              </span>
-            )}
-          </li>
-        ))}
+        {items.map((it) => {
+          const Tag = it.url ? 'a' : 'span';
+          return (
+            <li>
+              <Tag
+                href={it.url}
+                target={it.url ? '_blank' : undefined}
+                rel={it.url ? 'noopener' : undefined}
+                class:list={[
+                  'flex items-center gap-2 rounded-full border border-[var(--color-line)] bg-[var(--color-accent-soft)] px-3.5 py-1.5 text-sm',
+                  it.url && 'transition-colors hover:border-[var(--color-accent)]',
+                ]}
+              >
+                <span aria-hidden="true">★</span>
+                <span class="font-medium">{it.title}</span>
+                {(it.org || it.year) && (
+                  <span class="text-[var(--color-muted)]">
+                    {[it.org, it.year].filter(Boolean).join(' · ')}
+                  </span>
+                )}
+              </Tag>
+            </li>
+          );
+        })}
       </ul>
     </section>
   )

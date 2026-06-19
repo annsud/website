@@ -11,3 +11,34 @@ export function statusLabel(status: string): string {
     ] ?? status
   );
 }
+
+// Build a BibTeX entry from a paper's frontmatter, so any paper can be cited
+// even without a hand-written `bibtex` block.
+export function buildBibtex(data: {
+  title: string;
+  authors: string[];
+  year: number;
+  venue?: string;
+  status?: string;
+  bibtex?: string;
+}): string {
+  if (data.bibtex) return data.bibtex.trim();
+  const lastName = (data.authors[0] ?? 'anon').trim().split(/\s+/).pop() ?? 'anon';
+  const firstWord = (data.title.match(/[A-Za-z]+/)?.[0] ?? 'paper').toLowerCase();
+  const key = `${lastName.toLowerCase()}${data.year}${firstWord}`;
+  const author = data.authors.join(' and ');
+  const published = data.status === 'published';
+  const lines = [
+    `@${published ? 'article' : 'unpublished'}{${key},`,
+    `  title   = {${data.title}},`,
+    `  author  = {${author}},`,
+  ];
+  if (data.venue) {
+    lines.push(
+      published ? `  journal = {${data.venue}},` : `  note    = {${data.venue}},`
+    );
+  }
+  lines.push(`  year    = {${data.year}}`);
+  lines.push('}');
+  return lines.join('\n');
+}

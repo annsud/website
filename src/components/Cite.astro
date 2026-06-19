@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { buildBibtex } from '@/lib/format';
+
+interface Props {
+  data: CollectionEntry<'papers'>['data'];
+  size?: 'sm' | 'md';
+}
+const { data, size = 'md' } = Astro.props;
+const bib = buildBibtex(data);
+const pad = size === 'sm' ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-sm';
+---
+
+<button
+  type="button"
+  class:list={[
+    'cite-btn rounded-md border border-[var(--color-line)] font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
+    pad,
+  ]}
+  data-bibtex={bib}
+>
+  Cite
+</button>
+
+<script>
+  // One delegated handler copies the BibTeX from any Cite button on the page.
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const btn = target.closest<HTMLButtonElement>('.cite-btn');
+    if (!btn) return;
+    const bib = btn.dataset.bibtex ?? '';
+    navigator.clipboard
+      ?.writeText(bib)
+      .then(() => {
+        const original = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        window.setTimeout(() => {
+          btn.textContent = original;
+        }, 1500);
+      })
+      .catch(() => {});
+  });
+</script>

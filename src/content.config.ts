@@ -17,7 +17,7 @@ const papers = defineCollection({
       // Importance tier drives how richly the paper renders:
       //  0 = entry only (title + links)
       //  1 = expandable add-ons (figures / press / awards inline + light page)
-      //  2 = full dossier page (hero, story, interactives, gallery, follow-ups)
+      //  2 = full project page (story, interactives, follow-ups)
       tier: z.number().int().min(0).max(2).default(0),
       featured: z.boolean().default(false),
       // One-line hook shown on cards.
@@ -45,7 +45,7 @@ const papers = defineCollection({
         .array(
           z.object({
             outlet: z.string(),
-            title: z.string(),
+            title: z.string().optional(),
             url: z.string(),
             date: z.string().optional(),
           })
@@ -57,6 +57,7 @@ const papers = defineCollection({
             title: z.string(),
             org: z.string().optional(),
             year: z.number().optional(),
+            url: z.string().optional(),
           })
         )
         .default([]),

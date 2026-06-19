@@ -1,7 +1,9 @@
 ---
+// Press coverage of a paper. A few "featured" items (with a headline) are shown
+// in full; the rest are a compact, comma-separated list of linked outlet names.
 interface Item {
   outlet: string;
-  title: string;
+  title?: string;
   url: string;
   date?: string;
 }
@@ -9,41 +11,58 @@ interface Props {
   items: Item[];
   heading?: string;
 }
-const { items, heading = 'In the press' } = Astro.props;
+const { items, heading = 'Media & press' } = Astro.props;
+const featured = items.filter((it) => it.title);
+const rest = items.filter((it) => !it.title);
 ---
 
 {
   items.length > 0 && (
-    <section class="my-8">
-      <h3 class="mb-3 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
+    <section class="my-6">
+      <h3 class="mb-2 text-xs font-semibold tracking-[0.08em] text-[var(--color-muted)] uppercase">
         {heading}
       </h3>
-      <ul class="divide-y divide-[var(--color-line)] border-y border-[var(--color-line)]">
-        {items.map((it) => (
-          <li>
-            <a
-              href={it.url}
-              target="_blank"
-              rel="noopener"
-              class="group flex items-baseline justify-between gap-4 py-2.5"
-            >
-              <span class="flex items-baseline gap-3">
-                <span class="font-medium text-[var(--color-accent)]">
+
+      {featured.length > 0 && (
+        <ul class="mb-2 space-y-1.5">
+          {featured.map((it) => (
+            <li>
+              <a
+                href={it.url}
+                target="_blank"
+                rel="noopener"
+                class="group inline-flex flex-wrap items-baseline gap-x-2"
+              >
+                <span class="font-semibold text-[var(--color-accent)]">
                   {it.outlet}
                 </span>
                 <span class="text-[var(--color-ink)] group-hover:underline">
                   {it.title}
                 </span>
-              </span>
-              {it.date && (
-                <span class="shrink-0 text-sm text-[var(--color-muted)]">
-                  {it.date}
-                </span>
-              )}
-            </a>
-          </li>
-        ))}
-      </ul>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {rest.length > 0 && (
+        <p class="text-sm leading-relaxed text-[var(--color-muted)]">
+          {featured.length > 0 && 'Also covered in: '}
+          {rest.map((it, i) => (
+            <>
+              {i > 0 && ', '}
+              <a
+                href={it.url}
+                target="_blank"
+                rel="noopener"
+                class="font-medium text-[var(--color-ink)] underline-offset-2 hover:text-[var(--color-accent)] hover:underline"
+              >
+                {it.outlet}
+              </a>
+            </>
+          ))}
+        </p>
+      )}
     </section>
   )
 }
