@@ -8,12 +8,12 @@
   --font-serif: 'Newsreader', ui-serif, Georgia, Cambria, 'Times New Roman',
     serif;
 
-  --color-paper: #f6f8fc;
-  --color-ink: #0f172a;
-  --color-muted: #5a6b85;
-  --color-line: #e3e8f0;
-  --color-accent: #2563eb; /* blue-600 */
-  --color-accent-soft: #dde9fe;
+  --color-paper: #ffffff;
+  --color-ink: #0d0d0f;
+  --color-muted: #6b7280;
+  --color-line: #e8e8eb;
+  --color-accent: #1d4ed8; /* deep blue, used sparingly */
+  --color-accent-soft: #e8eefc;
 }
 
 html {
@@ -40,7 +40,7 @@ body {
   font-family: var(--font-serif);
   font-size: 1.125rem;
   line-height: 1.7;
-  color: #334155;
+  color: #242424;
 }
 .prose-editorial h2 {
   font-family: var(--font-serif);

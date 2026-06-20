@@ -48,7 +48,7 @@ const payload = JSON.stringify({ data, type, xLabel, yLabel });
     const spec = JSON.parse(el.dataset.spec || '{}');
     const { data, type, xLabel, yLabel } = spec;
     const width = el.clientWidth || 640;
-    const accent = '#2563eb';
+    const accent = '#1d4ed8';
 
     const color = { legend: true };
     const marks: any[] = [Plot.ruleY([0], { stroke: '#e6e1d8' })];
