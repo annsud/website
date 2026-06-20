@@ -28,6 +28,10 @@ const papers = defineCollection({
       // Path under /public, e.g. '/papers/surat-ets/teaser.jpg'.
       teaser: z.string().optional(),
       teaserAlt: z.string().optional(),
+      // One key figure, shown inside the Abstract reveal.
+      figure: z.string().optional(),
+      figureAlt: z.string().optional(),
+      figureCaption: z.string().optional(),
       links: z
         .object({
           pdf: z.string().optional(),

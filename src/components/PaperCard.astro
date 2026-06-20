@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { url } from '@/lib/site';
-import { authorParts } from '@/lib/format';
+import { byline } from '@/lib/format';
 import PaperLinks from './PaperLinks.astro';
 import PressList from './PressList.astro';
 import FollowUps from './FollowUps.astro';
@@ -13,10 +13,13 @@ interface Props {
 const { entry } = Astro.props;
 const p = entry.data;
 const href = url(`/papers/${entry.id}`);
-const authors = authorParts(p.authors);
-const hasProjectPage = p.tier === 2; // flagship studies get a full project page
+const { self, others } = byline(p.authors);
+const hasProjectPage = p.tier === 2; // (currently none — reserved)
 const published = p.status === 'published';
-const hasExtra = Boolean(p.abstract || p.press.length || p.followUps.length);
+const hasAbstract = Boolean(p.abstract || p.figure);
+const hasMedia = Boolean(p.press.length || p.followUps.length);
+const absId = `abs-${entry.id}`;
+const medId = `med-${entry.id}`;
 ---
 
 <article
@@ -35,8 +38,7 @@ const hasExtra = Boolean(p.abstract || p.press.length || p.followUps.length);
       }
     </h3>
 
-    {/* Journal below the title: smaller, but clearly visible. Real journals get
-        the accent colour; working-paper venues stay muted. */}
+    {/* Journal below the title: accent for published, muted for working papers. */}
     {
       p.venue &&
         (published ? (
@@ -50,17 +52,10 @@ const hasExtra = Boolean(p.abstract || p.press.length || p.followUps.length);
         ))
     }
 
+    {/* Anant-first byline (author lists are alphabetical). */}
     <p class="mt-1 text-sm text-[var(--color-muted)]">
-      {
-        authors.map((a, i) => (
-          <>
-            {i > 0 && ', '}
-            <span class:list={[a.me && 'font-semibold text-[var(--color-ink)]']}>
-              {a.name}
-            </span>
-          </>
-        ))
-      }
+      <span class="font-semibold text-[var(--color-ink)]">{self}</span>
+      {others.length > 0 && <> (with {others.join(', ')})</>}
     </p>
 
     {/* Awards: rare and important, so shown without a click. */}
@@ -109,24 +104,65 @@ const hasExtra = Boolean(p.abstract || p.press.length || p.followUps.length);
       }
     </div>
 
-    {/* Lightweight inline reveal: abstract + media, no page load. */}
+    {/* Two separate reveals: Abstract (with a key figure) and Media. */}
     {
-      hasExtra && (
-        <details class="mt-4 rounded-lg border border-[var(--color-line)] bg-white px-4 [&[open]>summary>.chev]:rotate-180">
-          <summary class="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-accent)]">
-            <span>Abstract &amp; media</span>
-            <span class="chev text-xs transition-transform">▾</span>
-          </summary>
-          <div class="pb-1">
-            {p.abstract && (
-              <p class="prose-editorial border-l-2 border-[var(--color-accent)] pl-4 text-[var(--color-muted)] italic">
-                {p.abstract}
-              </p>
+      (hasAbstract || hasMedia) && (
+        <div class="mt-4">
+          <div class="flex flex-wrap gap-2">
+            {hasAbstract && (
+              <button
+                type="button"
+                class="reveal-btn rounded-md border border-[var(--color-line)] bg-white px-3 py-1 text-xs font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)]"
+                data-target={absId}
+                aria-expanded="false"
+              >
+                Abstract
+              </button>
             )}
-            <FollowUps items={p.followUps} heading="Related projects & impact" />
-            <PressList items={p.press} heading="Media & press" />
+            {hasMedia && (
+              <button
+                type="button"
+                class="reveal-btn rounded-md border border-[var(--color-line)] bg-white px-3 py-1 text-xs font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)]"
+                data-target={medId}
+                aria-expanded="false"
+              >
+                Media
+              </button>
+            )}
           </div>
-        </details>
+
+          {hasAbstract && (
+            <div id={absId} class="reveal-panel mt-3 hidden">
+              {p.abstract && (
+                <p class="prose-editorial border-l-2 border-[var(--color-accent)] pl-4 text-[var(--color-muted)] italic">
+                  {p.abstract}
+                </p>
+              )}
+              {p.figure && (
+                <figure class="mt-4">
+                  <img
+                    src={url(p.figure)}
+                    alt={p.figureAlt ?? `Key figure from ${p.title}`}
+                    loading="lazy"
+                    class="w-full rounded-lg border border-[var(--color-line)] bg-white"
+                  />
+                  {p.figureCaption && (
+                    <figcaption class="mt-1.5 text-xs text-[var(--color-muted)]">
+                      {p.figureCaption}
+                    </figcaption>
+                  )}
+                </figure>
+              )}
+            </div>
+          )}
+
+          {hasMedia && (
+            <div id={medId} class="reveal-panel mt-3 hidden">
+              <FollowUps items={p.followUps} heading="Related projects & impact" />
+              <PressList items={p.press} heading="Media & press" />
+            </div>
+          )}
+        </div>
       )
     }
   </div>
@@ -139,3 +175,16 @@ const hasExtra = Boolean(p.abstract || p.press.length || p.followUps.length);
     </span>
   </div>
 </article>
+
+<script>
+  // Toggle an Abstract / Media panel independently (delegated, bundled once).
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.reveal-btn');
+    if (!btn) return;
+    const id = btn.dataset.target;
+    const panel = id ? document.getElementById(id) : null;
+    if (!panel) return;
+    const open = panel.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', String(open));
+  });
+</script>

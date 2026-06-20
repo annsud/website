@@ -15,7 +15,7 @@ const featured = (await getCollection('papers'))
 <BaseLayout>
   <!-- Hero -->
   <section class="mx-auto max-w-5xl px-5 pt-16 pb-12 sm:px-8">
-    <div class="grid items-center gap-10 sm:grid-cols-[1.4fr_1fr]">
+    <div class="grid items-start gap-10 sm:grid-cols-[1.5fr_auto]">
       <div class="rise">
         {
           SITE.role && (
@@ -35,25 +35,25 @@ const featured = (await getCollection('papers'))
         <p class="mt-4 text-sm text-[var(--color-muted)]">{SITE.affiliation}</p>
       </div>
 
-      <div class="rise justify-self-center">
+      <div class="rise justify-self-start sm:justify-self-end">
         <img
           src={url('/Headshot.jpg')}
           alt={SITE.name}
-          class="aspect-[4/5] w-56 rounded-2xl border border-[var(--color-line)] object-cover object-[20%_center] shadow-sm sm:w-full"
+          class="aspect-[4/5] w-44 rounded-2xl border border-[var(--color-line)] object-cover object-[20%_center] shadow-sm"
         />
       </div>
     </div>
   </section>
 
-  <!-- New research -->
+  <!-- New research (left-aligned with the hero) -->
   {
     featured.length > 0 && (
-      <section class="mx-auto max-w-3xl px-5 sm:px-8">
+      <section class="mx-auto mt-6 max-w-5xl px-5 sm:px-8">
         <h2 class="font-display text-2xl font-semibold">New Research</h2>
         <p class="mt-2 text-[var(--color-muted)]">
           The latest working papers and journal articles.
         </p>
-        <div class="mt-4">
+        <div class="mt-2 max-w-3xl">
           {featured.map((entry) => (
             <PaperCard entry={entry} />
           ))}

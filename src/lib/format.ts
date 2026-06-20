@@ -42,3 +42,11 @@ export function buildBibtex(data: {
   lines.push('}');
   return lines.join('\n');
 }
+
+// Author byline that always leads with Anant, then "(with …)". Author lists are
+// alphabetical, so listing them verbatim can wrongly imply he is the last author.
+export function byline(authors: string[], me = 'Sudarshan') {
+  const self = authors.find((a) => a.includes(me)) ?? authors[0] ?? '';
+  const others = authors.filter((a) => !a.includes(me));
+  return { self, others };
+}
