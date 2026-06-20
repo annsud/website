@@ -1,10 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { url } from '@/lib/site';
-import { authorParts, statusLabel } from '@/lib/format';
+import { authorParts } from '@/lib/format';
 import PaperLinks from './PaperLinks.astro';
 import PressList from './PressList.astro';
-import Awards from './Awards.astro';
 import FollowUps from './FollowUps.astro';
 import Cite from './Cite.astro';
 
@@ -16,34 +15,14 @@ const p = entry.data;
 const href = url(`/papers/${entry.id}`);
 const authors = authorParts(p.authors);
 const hasProjectPage = p.tier === 2; // flagship studies get a full project page
-const hasExtra = Boolean(
-  p.abstract || p.press.length || p.awards.length || p.followUps.length
-);
+const published = p.status === 'published';
+const hasExtra = Boolean(p.abstract || p.press.length || p.followUps.length);
 ---
 
-<article class="border-b border-[var(--color-line)] py-8 first:pt-0">
+<article
+  class="grid grid-cols-[1fr_auto] gap-x-5 border-b border-[var(--color-line)] py-7 first:pt-0"
+>
   <div class="min-w-0">
-    <div
-      class="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--color-muted)]"
-    >
-      <span class="font-medium">{statusLabel(p.status)}</span>
-      <span>{p.year}</span>
-      {
-        p.venue && (
-          <span class="text-sm font-semibold text-[var(--color-accent)]">
-            {p.venue}
-          </span>
-        )
-      }
-      {
-        hasProjectPage && (
-          <span class="rounded-full bg-[var(--color-accent-soft)] px-2 py-0.5 font-medium text-[var(--color-accent)]">
-            Project page
-          </span>
-        )
-      }
-    </div>
-
     <h3 class="font-display text-xl leading-snug font-semibold">
       {
         hasProjectPage ? (
@@ -55,6 +34,21 @@ const hasExtra = Boolean(
         )
       }
     </h3>
+
+    {/* Journal below the title: smaller, but clearly visible. Real journals get
+        the accent colour; working-paper venues stay muted. */}
+    {
+      p.venue &&
+        (published ? (
+          <p class="mt-1 text-sm font-semibold text-[var(--color-accent)]">
+            {p.venue}
+          </p>
+        ) : (
+          <p class="mt-1 text-sm font-medium text-[var(--color-muted)] italic">
+            {p.venue}
+          </p>
+        ))
+    }
 
     <p class="mt-1 text-sm text-[var(--color-muted)]">
       {
@@ -68,6 +62,35 @@ const hasExtra = Boolean(
         ))
       }
     </p>
+
+    {/* Awards: rare and important, so shown without a click. */}
+    {
+      p.awards.length > 0 && (
+        <div class="mt-2.5 flex flex-wrap gap-2">
+          {p.awards.map((a) => {
+            const Tag = a.url ? 'a' : 'span';
+            const meta = [a.org, a.year].filter(Boolean).join(' · ');
+            return (
+              <Tag
+                href={a.url}
+                target={a.url ? '_blank' : undefined}
+                rel={a.url ? 'noopener' : undefined}
+                class:list={[
+                  'inline-flex items-center gap-1.5 rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-800',
+                  a.url && 'transition-colors hover:border-amber-500',
+                ]}
+              >
+                <span aria-hidden="true">★</span>
+                <span>
+                  {a.title}
+                  {meta && ` · ${meta}`}
+                </span>
+              </Tag>
+            );
+          })}
+        </div>
+      )
+    }
 
     <p class="mt-3 max-w-prose text-[0.95rem] text-[#334155]">{p.summary}</p>
 
@@ -100,12 +123,19 @@ const hasExtra = Boolean(
                 {p.abstract}
               </p>
             )}
-            <Awards items={p.awards} />
             <FollowUps items={p.followUps} heading="Related projects & impact" />
             <PressList items={p.press} heading="Media & press" />
           </div>
         </details>
       )
     }
+  </div>
+
+  <div class="pt-1 text-right">
+    <span
+      class="font-display text-lg font-semibold tabular-nums text-[var(--color-ink)]"
+    >
+      {p.year}
+    </span>
   </div>
 </article>

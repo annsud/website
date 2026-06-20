@@ -3,14 +3,14 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PaperCard from '@/components/PaperCard.astro';
 
-const papers = (await getCollection('papers')).sort((a, b) => {
-  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
-  return b.data.year - a.data.year;
-});
+// Reverse-chronological (newest first), ties broken by title.
+const papers = (await getCollection('papers')).sort(
+  (a, b) =>
+    b.data.year - a.data.year || a.data.title.localeCompare(b.data.title)
+);
 
-const topics = Array.from(
-  new Set(papers.flatMap((p) => p.data.topics))
-).sort();
+const topics = Array.from(new Set(papers.flatMap((p) => p.data.topics))).sort();
+const statusKey = (s: string) => (s === 'published' ? 'published' : 'working');
 ---
 
 <BaseLayout
@@ -20,17 +20,40 @@ const topics = Array.from(
   <div class="mx-auto max-w-3xl px-5 pt-12 pb-2 sm:px-8">
     <h1 class="font-display text-4xl font-semibold tracking-tight">Research</h1>
 
+    <!-- View toggle: all / published / working papers -->
+    <div
+      id="status-filter"
+      class="mt-6 inline-flex rounded-lg border border-[var(--color-line)] bg-white p-1 text-sm"
+    >
+      <button data-status="__all" class="status-btn rounded-md px-3 py-1 font-medium">
+        All
+      </button>
+      <button
+        data-status="published"
+        class="status-btn rounded-md px-3 py-1 font-medium"
+      >
+        Published
+      </button>
+      <button
+        data-status="working"
+        class="status-btn rounded-md px-3 py-1 font-medium"
+      >
+        Working papers
+      </button>
+    </div>
+
+    <!-- Topic filter -->
     {
       topics.length > 0 && (
         <div
           id="topic-filter"
-          class="mt-7 flex flex-wrap gap-2 border-y border-[var(--color-line)] py-4"
+          class="mt-4 flex flex-wrap gap-2 border-y border-[var(--color-line)] py-4"
         >
           <button
             data-topic="__all"
             class="topic-btn rounded-full bg-[var(--color-ink)] px-3 py-1 text-sm text-white"
           >
-            All
+            All topics
           </button>
           {topics.map((t) => (
             <button
@@ -47,7 +70,11 @@ const topics = Array.from(
     <div id="paper-list" class="mt-2">
       {
         papers.map((entry) => (
-          <div class="paper-row" data-topics={entry.data.topics.join('|')}>
+          <div
+            class="paper-row"
+            data-topics={entry.data.topics.join('|')}
+            data-status={statusKey(entry.data.status)}
+          >
             <PaperCard entry={entry} />
           </div>
         ))
@@ -57,28 +84,63 @@ const topics = Array.from(
 </BaseLayout>
 
 <script>
-  const btns = document.querySelectorAll<HTMLButtonElement>('.topic-btn');
+  const topicBtns = document.querySelectorAll<HTMLButtonElement>('.topic-btn');
+  const statusBtns = document.querySelectorAll<HTMLButtonElement>('.status-btn');
   const rows = document.querySelectorAll<HTMLElement>('.paper-row');
-  const on = 'bg-[var(--color-ink)] text-white';
-  const off = 'border border-[var(--color-line)] text-[var(--color-muted)]';
 
-  function setActive(active: HTMLButtonElement) {
-    btns.forEach((b) => {
-      b.className =
-        'topic-btn rounded-full px-3 py-1 text-sm ' +
-        (b === active ? on : off + ' hover:border-[var(--color-accent)]');
+  let activeTopic = '__all';
+  let activeStatus = '__all';
+
+  const topicOn = 'bg-[var(--color-ink)] text-white';
+  const topicOff =
+    'border border-[var(--color-line)] text-[var(--color-muted)] hover:border-[var(--color-accent)]';
+  const statusOn = 'bg-[var(--color-accent)] text-white';
+  const statusOff = 'text-[var(--color-muted)] hover:text-[var(--color-ink)]';
+
+  function apply() {
+    rows.forEach((row) => {
+      const topics = (row.dataset.topics || '').split('|');
+      const st = row.dataset.status || '';
+      const show =
+        (activeTopic === '__all' || topics.includes(activeTopic)) &&
+        (activeStatus === '__all' || st === activeStatus);
+      row.style.display = show ? '' : 'none';
     });
   }
 
-  btns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const topic = btn.dataset.topic;
-      setActive(btn);
-      rows.forEach((row) => {
-        const topics = (row.dataset.topics || '').split('|');
-        const show = topic === '__all' || topics.includes(topic || '');
-        row.style.display = show ? '' : 'none';
-      });
+  function paintTopics(active: HTMLButtonElement) {
+    topicBtns.forEach((b) => {
+      b.className =
+        'topic-btn rounded-full px-3 py-1 text-sm ' +
+        (b === active ? topicOn : topicOff);
     });
-  });
+  }
+  function paintStatus(active: HTMLButtonElement) {
+    statusBtns.forEach((b) => {
+      b.className =
+        'status-btn rounded-md px-3 py-1 font-medium ' +
+        (b === active ? statusOn : statusOff);
+    });
+  }
+
+  topicBtns.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      activeTopic = btn.dataset.topic || '__all';
+      paintTopics(btn);
+      apply();
+    })
+  );
+  statusBtns.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      activeStatus = btn.dataset.status || '__all';
+      paintStatus(btn);
+      apply();
+    })
+  );
+
+  // Initialise the status control's active styling.
+  const initStatus = document.querySelector<HTMLButtonElement>(
+    '.status-btn[data-status="__all"]'
+  );
+  if (initStatus) paintStatus(initStatus);
 </script>

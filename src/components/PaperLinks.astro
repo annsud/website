@@ -7,15 +7,15 @@ interface Props {
 }
 const { links, size = 'md' } = Astro.props;
 const order: [string, string][] = [
-  ['pdf', 'PDF'],
   ['journal', 'Journal'],
+  ['wp', 'Working paper'],
   ['nber', 'NBER'],
-  ['arxiv', 'arXiv'],
-  ['ssrn', 'SSRN'],
+  ['pdf', 'PDF'],
   ['website', 'Project site'],
+  ['data', 'Data & code'],
   ['code', 'Code'],
-  ['data', 'Data'],
   ['slides', 'Slides'],
+  ['arxiv', 'arXiv'],
 ];
 const present = order.filter(([k]) => links[k]);
 const pad = size === 'sm' ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-sm';
@@ -30,7 +30,7 @@ const pad = size === 'sm' ? 'px-2.5 py-1 text-xs' : 'px-3 py-1.5 text-sm';
           target="_blank"
           rel="noopener"
           class:list={[
-            'rounded-md border border-[var(--color-line)] font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
+            'rounded-md border border-[var(--color-line)] bg-white font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]',
             pad,
           ]}
         >

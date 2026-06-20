@@ -32,6 +32,7 @@ const papers = defineCollection({
         .object({
           pdf: z.string().optional(),
           journal: z.string().optional(),
+          wp: z.string().optional(),
           arxiv: z.string().optional(),
           nber: z.string().optional(),
           ssrn: z.string().optional(),

@@ -28,8 +28,8 @@ const { items, heading = 'Recognition' } = Astro.props;
                 target={it.url ? '_blank' : undefined}
                 rel={it.url ? 'noopener' : undefined}
                 class:list={[
-                  'flex items-center gap-2 rounded-full border border-[var(--color-line)] bg-[var(--color-accent-soft)] px-3.5 py-1.5 text-sm',
-                  it.url && 'transition-colors hover:border-[var(--color-accent)]',
+                  'flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-3.5 py-1.5 text-sm text-amber-800',
+                  it.url && 'transition-colors hover:border-amber-500',
                 ]}
               >
                 <span aria-hidden="true">★</span>
