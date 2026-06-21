@@ -19,7 +19,9 @@ const papers = defineCollection({
       //  1 = expandable add-ons (figures / press / awards inline + light page)
       //  2 = full project page (story, interactives, follow-ups)
       tier: z.number().int().min(0).max(2).default(0),
-      featured: z.boolean().default(false),
+      // Pin a paper to the top of the homepage "New Research" list. Remaining
+      // slots (3 total) are filled by most-recent year. Default: not pinned.
+      pinned: z.boolean().default(false),
       // One-line hook shown on cards.
       summary: z.string(),
       // Longer plain-language abstract for Tier 1+.

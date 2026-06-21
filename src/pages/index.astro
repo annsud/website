@@ -4,12 +4,17 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PaperCard from '@/components/PaperCard.astro';
 import { SITE, url } from '@/lib/site';
 
-// "New Research" = the three most recent papers (working or published),
-// sorted by year. Surfaces your newest output automatically — no manual curation.
-const recent = (await getCollection('papers'))
+// "New Research" = up to three papers. Pinned papers (`pinned: true`) come
+// first (newest pinned first); remaining slots are filled by the most recent
+// papers (working or published). Drafts are excluded. With nothing pinned —
+// the current state — this is simply the three most recent papers by year.
+const ranked = (await getCollection('papers'))
   .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.year - a.data.year)
-  .slice(0, 3);
+  .sort((a, b) => b.data.year - a.data.year);
+const recent = [
+  ...ranked.filter((p) => p.data.pinned),
+  ...ranked.filter((p) => !p.data.pinned),
+].slice(0, 3);
 ---
 
 <BaseLayout>
