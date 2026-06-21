@@ -4,10 +4,10 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PaperCard from '@/components/PaperCard.astro';
 import { SITE, url } from '@/lib/site';
 
-// "New research" = the most recent working papers and journal articles,
-// curated via the `featured` flag in each paper's frontmatter.
-const featured = (await getCollection('papers'))
-  .filter((p) => p.data.featured)
+// "New Research" = the three most recent papers (working or published),
+// sorted by year. Surfaces your newest output automatically — no manual curation.
+const recent = (await getCollection('papers'))
+  .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.year - a.data.year)
   .slice(0, 3);
 ---
@@ -47,14 +47,14 @@ const featured = (await getCollection('papers'))
 
   <!-- New research (left-aligned with the hero) -->
   {
-    featured.length > 0 && (
+    recent.length > 0 && (
       <section class="mx-auto mt-6 max-w-5xl px-5 sm:px-8">
         <h2 class="font-display text-2xl font-semibold">New Research</h2>
         <p class="mt-2 text-[var(--color-muted)]">
           The latest working papers and journal articles.
         </p>
         <div class="mt-2 max-w-3xl">
-          {featured.map((entry) => (
+          {recent.map((entry) => (
             <PaperCard entry={entry} />
           ))}
         </div>
