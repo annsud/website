@@ -25,6 +25,7 @@ export function url(path = '/'): string {
 
 // Primary navigation.
 export const NAV: { label: string; href: string }[] = [
+  { label: 'Home', href: '/' },
   { label: 'Research', href: '/papers' },
   { label: 'About', href: '/about' },
   { label: 'CV', href: '/cv' },
