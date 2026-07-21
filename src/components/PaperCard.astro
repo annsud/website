@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { url } from '@/lib/site';
-import { byline } from '@/lib/format';
+import { byline, venueParts } from '@/lib/format';
 import PaperLinks from './PaperLinks.astro';
 import PressList from './PressList.astro';
 import FollowUps from './FollowUps.astro';
@@ -38,7 +38,9 @@ const medId = `med-${entry.id}`;
       }
     </h3>
 
-    {/* Journal below the title: accent for published, muted for working papers. */}
+    {/* Journal below the title: accent for published venues. Working papers are
+        muted, except a "revise & resubmit" status + journal, which is accented
+        like a published venue. */}
     {
       p.venue &&
         (published ? (
@@ -46,8 +48,21 @@ const medId = `med-${entry.id}`;
             {p.venue}
           </p>
         ) : (
-          <p class="mt-1 text-sm font-medium text-[var(--color-muted)] italic">
-            {p.venue}
+          <p class="mt-1 text-sm">
+            {venueParts(p.venue).map((part, i) => (
+              <>
+                {i > 0 && <span class="text-[var(--color-muted)]"> · </span>}
+                <span
+                  class:list={
+                    part.rr
+                      ? 'font-semibold text-[var(--color-accent)]'
+                      : 'font-medium text-[var(--color-muted)] italic'
+                  }
+                >
+                  {part.text}
+                </span>
+              </>
+            ))}
           </p>
         ))
     }

@@ -4,6 +4,23 @@ export function authorParts(authors: string[], me = 'Sudarshan') {
   return authors.map((name) => ({ name, me: name.includes(me) }));
 }
 
+// A paper that is "revise & resubmit" at a journal is near-accepted, so its
+// status + journal deserve the same accent treatment as a published venue —
+// not the muted styling of an ordinary working paper. Matches "R&R" and the
+// spelled-out "revise & resubmit" / "revise and resubmit" forms.
+const REVISE_RESUBMIT = /r&r|revise\s*(?:&|and)\s*resubmit/i;
+
+// Split a venue string on the "·" separator and flag each segment as an R&R
+// status. Lets a card show e.g. "Working paper" muted but "R&R, Journal of
+// Political Economy" in accent. Non-R&R venues yield a single muted segment.
+export function venueParts(venue: string): { text: string; rr: boolean }[] {
+  return venue
+    .split('·')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .map((text) => ({ text, rr: REVISE_RESUBMIT.test(text) }));
+}
+
 export function statusLabel(status: string): string {
   return (
     { published: 'Published', working: 'Working paper', progress: 'In progress' }[

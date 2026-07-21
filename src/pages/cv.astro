@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { SITE, url } from '@/lib/site';
+import { venueParts } from '@/lib/format';
 
 const appointments = [
   {
@@ -370,7 +371,21 @@ const chapters = [
                   <span class="font-medium">{p.title}</span>
                 )}
                 <p class="mt-1 text-sm text-[var(--color-muted)]">
-                  {p.authors} · <span class="italic">{p.venue}</span>
+                  {p.authors} ·{' '}
+                  {venueParts(p.venue).map((part, i) => (
+                    <>
+                      {i > 0 && <span> · </span>}
+                      <span
+                        class:list={
+                          part.rr
+                            ? 'font-semibold text-[var(--color-accent)]'
+                            : 'italic'
+                        }
+                      >
+                        {part.text}
+                      </span>
+                    </>
+                  ))}
                 </p>
               </li>
             ))
