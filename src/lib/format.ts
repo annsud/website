@@ -4,21 +4,64 @@ export function authorParts(authors: string[], me = 'Sudarshan') {
   return authors.map((name) => ({ name, me: name.includes(me) }));
 }
 
-// A paper that is "revise & resubmit" at a journal is near-accepted, so its
-// status + journal deserve the same accent treatment as a published venue —
-// not the muted styling of an ordinary working paper. Matches "R&R" and the
-// spelled-out "revise & resubmit" / "revise and resubmit" forms.
-const REVISE_RESUBMIT = /r&r|revise\s*(?:&|and)\s*resubmit/i;
+// Peel a leading "R&R" / "revise & resubmit" / "revise and resubmit" status
+// off a venue segment so the journal name can be highlighted on its own.
+const REVISE_RESUBMIT = /^(r&r|revise\s*(?:&|and)\s*resubmit)\b[,\s]*/i;
+const STATUS_ONLY = /^(working paper|in preparation|nber working paper)$/i;
+const NOT_JOURNAL = /\b(award|prize|finalist|lead article)\b|^\(?forthcoming\)?$/i;
+// Volume, issue, or page-range that follows the journal name.
+const AFTER_JOURNAL = /,\s*(?=\d|[IVXLC]+\(|pp\.)/;
 
-// Split a venue string on the "·" separator and flag each segment as an R&R
-// status. Lets a card show e.g. "Working paper" muted but "R&R, Journal of
-// Political Economy" in accent. Non-R&R venues yield a single muted segment.
-export function venueParts(venue: string): { text: string; rr: boolean }[] {
-  return venue
+export type VenuePart = {
+  text: string;
+  journal: boolean;
+  /** Separator to render before this part (empty for the first). */
+  before: string;
+};
+
+// Split a venue into highlightable journal names vs. status, volume, and
+// awards. "Revise & resubmit, Journal of Political Economy" yields a muted
+// status and an accented journal; "American Economic Review, 116(3), …"
+// yields the journal name only as the accented part.
+export function venueParts(venue: string): VenuePart[] {
+  const parts: VenuePart[] = [];
+  const push = (text: string, journal: boolean, before: string) => {
+    if (text) parts.push({ text, journal, before });
+  };
+
+  let foundJournal = false;
+  venue
     .split('·')
     .map((s) => s.trim())
     .filter(Boolean)
-    .map((text) => ({ text, rr: REVISE_RESUBMIT.test(text) }));
+    .forEach((seg, i) => {
+      const segBefore = i === 0 ? '' : ' · ';
+      const rr = seg.match(REVISE_RESUBMIT);
+      let rest = seg;
+      let restBefore = segBefore;
+      if (rr) {
+        push(rr[1], false, segBefore);
+        rest = seg.slice(rr[0].length).trim();
+        restBefore = ', ';
+      }
+      if (!rest) return;
+
+      if (STATUS_ONLY.test(rest) || NOT_JOURNAL.test(rest) || foundJournal) {
+        push(rest, false, restBefore);
+        return;
+      }
+
+      const cut = rest.search(AFTER_JOURNAL);
+      if (cut !== -1) {
+        push(rest.slice(0, cut), true, restBefore);
+        push(rest.slice(cut).replace(/^,\s*/, ''), false, ', ');
+      } else {
+        push(rest, true, restBefore);
+      }
+      foundJournal = true;
+    });
+
+  return parts;
 }
 
 export function statusLabel(status: string): string {

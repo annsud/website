@@ -15,7 +15,6 @@ const p = entry.data;
 const href = url(`/papers/${entry.id}`);
 const { self, others } = byline(p.authors);
 const hasProjectPage = p.tier === 2; // (currently none — reserved)
-const published = p.status === 'published';
 const hasAbstract = Boolean(p.abstract || p.figure);
 const hasMedia = Boolean(p.press.length || p.followUps.length);
 const absId = `abs-${entry.id}`;
@@ -38,33 +37,28 @@ const medId = `med-${entry.id}`;
       }
     </h3>
 
-    {/* Journal below the title: accent for published venues. Working papers are
-        muted, except a "revise & resubmit" status + journal, which is accented
-        like a published venue. */}
+    {/* Journal name in accent. Status (working paper, R&R) and extras stay muted. */}
     {
-      p.venue &&
-        (published ? (
-          <p class="mt-1 text-sm font-semibold text-[var(--color-accent)]">
-            {p.venue}
-          </p>
-        ) : (
-          <p class="mt-1 text-sm">
-            {venueParts(p.venue).map((part, i) => (
-              <>
-                {i > 0 && <span class="text-[var(--color-muted)]"> · </span>}
-                <span
-                  class:list={
-                    part.rr
-                      ? 'font-semibold text-[var(--color-accent)]'
-                      : 'font-medium text-[var(--color-muted)] italic'
-                  }
-                >
-                  {part.text}
-                </span>
-              </>
-            ))}
-          </p>
-        ))
+      p.venue && (
+        <p class="mt-1 text-sm">
+          {venueParts(p.venue).map((part) => (
+            <>
+              {part.before && (
+                <span class="text-[var(--color-muted)]">{part.before}</span>
+              )}
+              <span
+                class:list={
+                  part.journal
+                    ? 'font-semibold text-[var(--color-accent)]'
+                    : 'font-medium text-[var(--color-muted)] italic'
+                }
+              >
+                {part.text}
+              </span>
+            </>
+          ))}
+        </p>
+      )
     }
 
     {/* Anant-first byline (author lists are alphabetical). */}

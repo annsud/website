@@ -340,7 +340,22 @@ const chapters = [
                   <span class="font-medium">{p.title}</span>
                 )}
                 <p class="mt-1 text-sm text-[var(--color-muted)]">
-                  {p.authors} · <span class="italic">{p.venue}</span> ({p.year})
+                  {p.authors} ·{' '}
+                  {venueParts(p.venue).map((part) => (
+                    <>
+                      {part.before}
+                      <span
+                        class:list={
+                          part.journal
+                            ? 'italic text-[var(--color-accent)]'
+                            : 'italic'
+                        }
+                      >
+                        {part.text}
+                      </span>
+                    </>
+                  ))}{' '}
+                  ({p.year})
                 </p>
               </li>
             ))
@@ -372,13 +387,13 @@ const chapters = [
                 )}
                 <p class="mt-1 text-sm text-[var(--color-muted)]">
                   {p.authors} ·{' '}
-                  {venueParts(p.venue).map((part, i) => (
+                  {venueParts(p.venue).map((part) => (
                     <>
-                      {i > 0 && <span> · </span>}
+                      {part.before}
                       <span
                         class:list={
-                          part.rr
-                            ? 'font-semibold text-[var(--color-accent)]'
+                          part.journal
+                            ? 'italic text-[var(--color-accent)]'
                             : 'italic'
                         }
                       >
