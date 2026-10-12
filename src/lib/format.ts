@@ -4,9 +4,9 @@ export function authorParts(authors: string[], me = 'Sudarshan') {
   return authors.map((name) => ({ name, me: name.includes(me) }));
 }
 
-// Peel a leading "R&R" / "revise & resubmit" / "revise and resubmit" status
-// off a venue segment so the journal name can be highlighted on its own.
-const REVISE_RESUBMIT = /^(r&r|revise\s*(?:&|and)\s*resubmit)\b[,\s]*/i;
+// Peel a leading editorial status off a venue segment so the journal name
+// can be highlighted on its own.
+const REVISE_RESUBMIT = /^(r&r|revise\s*(?:&|and)\s*resubmit|conditionally\s+accepted)\b[,\s]*/i;
 const STATUS_ONLY = /^(working paper|in preparation|nber working paper)$/i;
 const NOT_JOURNAL = /\b(award|prize|finalist|lead article)\b|^\(?forthcoming\)?$/i;
 // Volume, issue, or page-range that follows the journal name.
